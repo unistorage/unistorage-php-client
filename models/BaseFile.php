@@ -8,6 +8,19 @@ class BaseFile
 	private $uri;
 	private $name;
 	private $size;
+	protected $watermarkSupported = false;
+
+	const WATERMARK_CORNER_NE = 'ne';
+	const WATERMARK_CORNER_SE = 'se';
+	const WATERMARK_CORNER_SW = 'sw';
+	const WATERMARK_CORNER_NW = 'nw';
+
+	private $watermarkCorners = array(
+		self::WATERMARK_CORNER_NE,
+		self::WATERMARK_CORNER_SE,
+		self::WATERMARK_CORNER_SW,
+		self::WATERMARK_CORNER_NW,
+	);
 
 	public function __construct($uid, $info, $ttl)
 	{
@@ -50,5 +63,33 @@ class BaseFile
 	public function getUri()
 	{
 		return $this->uri;
+	}
+
+	public function watermark($watermark_id, $width, $height, $h_pad, $w_pad, $corner = self::WATERMARK_CORNER_SW)
+	{
+		if (!$this->watermarkSupported)
+			throw new Exception('This file type doesn\'t support watermarking');
+
+		if (!(int)$width || !(int)$height || !(int)$h_pad || !(int)$w_pad)
+			throw new Exception ('Incorrect position params');
+
+		if (!in_array($corner, $this->watermarkCorners))
+			throw new Exception ('Incorrect corner name');
+
+		if (!(int)$watermark_id)
+			throw new Exception ('Incorrect watermark id');
+
+		$params = array(
+			'corner' => $corner,
+			'width' => $width,
+			'height' => $height,
+			'h_pad' => $h_pad,
+			'w_pad' => $w_pad,
+			'watermark_id' => (int)$watermark_id,
+		);
+
+		$uc = UnistorageClient::app();
+
+		return $uc->action($this->getUid(), 'watermark', $params);
 	}
 }

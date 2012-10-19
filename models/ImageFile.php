@@ -5,6 +5,8 @@ class ImageFile extends BaseFile
 	private $width;
 	private $height;
 
+	protected $watermarkSupported = true;
+
 	const RESIZE_MODE_KEEP = 'keep';
 	const RESIZE_MODE_CROP = 'crop';
 	const RESIZE_MODE_RESIZE = 'resize';

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/models/BaseFile.php';
 require_once __DIR__ . '/models/ImageFile.php';
+require_once __DIR__ . '/models/VideoFile.php';
+require_once __DIR__ . '/models/DocFile.php';
 
 class UnistorageClient
 {
@@ -11,22 +13,24 @@ class UnistorageClient
 	public $debug = true;
 	private $result;
 
+	public static $baseClass = 'BaseFile';
+	public static $videoClass = 'VideoFile';
+	public static $imageClass = 'ImageFile';
+	public static $docClass = 'DocFile';
+
 	private $curlInfo = array();
 
-	private static $_mime2Class = array(
-		'image/jpeg' => 'ImageFile',
-		'image/gif' => 'ImageFile',
-		'image/png' => 'ImageFile',
-		'image/tiff' => 'ImageFile',
-		'image/bmp' => 'ImageFile',
-	);
+	private static $_mime2Class = array();
 
-	public static function app() {
-		if ( is_null(self::$instance) ) {
-			self::$instance = new UnistorageClient(UC_HOST,UC_TOKEN);
+	public static function app()
+	{
+		if (is_null(self::$instance)) {
+			self::$instance = new UnistorageClient(UC_HOST, UC_TOKEN);
 		}
+
 		return self::$instance;
 	}
+
 	/**
 	 * @param string $host without trailing slash and protocol
 	 * @param string $token
@@ -35,6 +39,23 @@ class UnistorageClient
 	{
 		$this->host = $host;
 		$this->token = $token;
+
+		self::$_mime2Class = array(
+			'#^image/.+$#' => self::$imageClass,
+			'#^video/.+$#' => self::$videoClass,
+			'#^application/ogg$#' => self::$videoClass,
+			'#^application/msword#^' => self::$docClass,
+			'#^application/vnd.openxmlformats-officedocument.wordprocessingml.document#^' => self::$docClass,
+			'#^application/vnd.oasis.opendocument.text#^' => self::$docClass,
+			'#^application/pdf#^' => self::$docClass,
+			'#^application/vnd.pdf#^' => self::$docClass,
+			'#^application/x-pdf#^' => self::$docClass,
+			'#^application/rtf#^' => self::$docClass,
+			'#^application/x-rtf#^' => self::$docClass,
+			'#^text/richtext#^' => self::$docClass,
+			'#^text/plain#^' => self::$docClass,
+			'#^text/html#^' => self::$docClass,
+		);
 	}
 
 
@@ -52,17 +73,15 @@ class UnistorageClient
 		if (is_null($headers))
 			$headers = array();
 
-		$headers['Token'] = $this->token;
-
 		$request = array();
 		$request['resource'] = '/';
 
 		return $this->sendRequest($request, $headers, $curl_opts);
 	}
 
-	public function getFile($uid,$request = null)
+	public function getFile($uid, $request = null)
 	{
-		if(!$request) {
+		if (!$request) {
 			$request = array();
 			$request['resource'] = '/' . $uid . '/';
 		} else {
@@ -78,11 +97,13 @@ class UnistorageClient
 		if (!$class || !class_exists($class)) {
 			$class = 'BaseFile';
 		}
+
 		return new $class(isset($this->result->id) ? $this->result->id : $uid, isset($this->result->information) ? $this->result->information : null, isset($this->result->ttl) ? $this->result->ttl : null);
 	}
 
-	public function action($uid,$action,$params = null) {
-		if($params && !is_array($params))
+	public function action($uid, $action, $params = null)
+	{
+		if ($params && !is_array($params))
 			throw new Exception ('Incorrect action params');
 
 		$request = array();
@@ -90,8 +111,9 @@ class UnistorageClient
 		foreach ($params as $key => $value) {
 			$paramsEncoded[] = "$key=$value";
 		}
-		$request['resource'] = "?action=$action" . (!empty($paramsEncoded) ? '&' . implode('&',$paramsEncoded) : '');
-		return $this->getFile($uid,$request);
+		$request['resource'] = "?action=$action" . (!empty($paramsEncoded) ? '&' . implode('&', $paramsEncoded) : '');
+
+		return $this->getFile($uid, $request);
 	}
 
 	private function sendRequest($request, $headers = null, $curl_opts = null)
@@ -105,7 +127,7 @@ class UnistorageClient
 			$headers[$k] = "$k: $v";
 
 		$uri = 'http://' . $this->host . $request['resource'];
-		if($this->debug) echo "---------- $uri ---------\n";
+		if ($this->debug) echo "---------- $uri ---------\n";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $uri);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -122,7 +144,7 @@ class UnistorageClient
 		$this->curlInfo = curl_getinfo($ch);
 		curl_close($ch);
 		$this->result = json_decode($result);
-		if($this->debug) var_dump($this->result);
+		if ($this->debug) var_dump($this->result);
 
 		return $this->curlInfo['http_code'] == '200';
 	}
@@ -137,11 +159,15 @@ class UnistorageClient
 
 	/**
 	 * @param $mimeType string
-	 * @return mixed
+	 * @return string Class name
 	 */
 	public function getFileClass($mimeType)
 	{
-		if (!isset(self::$_mime2Class[$mimeType])) return false;
-		else return self::$_mime2Class[$mimeType];
+		foreach (self::$_mime2Class as $pattern => $class) {
+			if (preg_match($pattern, $mimeType))
+				return $class;
+		}
+
+		return false;
 	}
 }
