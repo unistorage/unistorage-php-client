@@ -1,6 +1,6 @@
 <?php namespace Unistorage;
 
-class Unistorage extends \CApplicationComponent
+class Unistorage
 {
 	const STATUS_OK = 'ok';
 	const STATUS_ERROR = 'error';
@@ -16,14 +16,15 @@ class Unistorage extends \CApplicationComponent
 	 */
 	public $token;
 
-	public function init()
+	/**
+	 * @param string $host
+	 * @param string $token
+	 */
+	function __construct($host, $token)
 	{
-		if (\Yii::getPathOfAlias('unistorageClient') === false)
-			\Yii::setPathOfAlias('unistorageClient', __DIR__);
-
-		\Yii::import('unistorageClient.helpers.CurlHelper.CurlHelper');
-
-		parent::init();
+		$this->host = $host;
+		$this->token = $token;
+		defined('UNISTORAGE_CLIENT') || define('UNISTORAGE_CLIENT', __DIR__);
 	}
 
 	/**
@@ -61,7 +62,7 @@ class Unistorage extends \CApplicationComponent
 
 	/**
 	 * @param string $filePath
-	 * @param null|string $typeId
+	 * @param null|string $typeId used for internal unistorage statistics
 	 * @throws USException
 	 * @return File
 	 */

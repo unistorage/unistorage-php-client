@@ -4,7 +4,7 @@
  * @property-read int $ttl
  * @property-read string $resourceUri
  */
-abstract class File extends \CComponent
+abstract class File extends Component
 {
 	/**
 	 * @var int

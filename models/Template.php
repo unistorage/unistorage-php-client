@@ -3,7 +3,7 @@
 /**
  * @property-read string $resourceUri
  */
-class Template extends \CComponent
+class Template extends Component
 {
 	/**
 	 * @var string
