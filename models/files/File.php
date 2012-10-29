@@ -9,12 +9,12 @@ abstract class File extends Component
 	/**
 	 * @var int
 	 */
-	private $ttl;
+	protected $ttl;
 
 	/**
 	 * @var string
 	 */
-	private $resourceUri;
+	protected $resourceUri;
 
 	/**
 	 * @param string $resourceUri

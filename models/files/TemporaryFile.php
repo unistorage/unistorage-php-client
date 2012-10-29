@@ -10,7 +10,7 @@ class TemporaryFile extends File
 	/**
 	 * @var string
 	 */
-	private $uri;
+	protected $uri;
 
 	/**
 	 * @param string $uri

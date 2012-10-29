@@ -5,17 +5,17 @@ class ImageFile extends RegularFile
 	/**
 	 * @var string
 	 */
-	private $type = RegularFile::FILE_TYPE_IMAGE;
+	protected $type = RegularFile::FILE_TYPE_IMAGE;
 
 	/**
 	 * @var int
 	 */
-	private $width;
+	protected $width;
 
 	/**
 	 * @var int
 	 */
-	private $height;
+	protected $height;
 
 	const MODE_KEEP = 'keep';
 	const MODE_CROP = 'crop';

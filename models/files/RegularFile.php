@@ -18,27 +18,27 @@ class RegularFile extends File
 	/**
 	 * @var string
 	 */
-	private $mimeType;
+	protected $mimeType;
 
 	/**
 	 * @var string
 	 */
-	private $name;
+	protected $name;
 
 	/**
 	 * @var int
 	 */
-	private $size;
+	protected $size;
 
 	/**
 	 * @var string
 	 */
-	private $uri;
+	protected $uri;
 
 	/**
 	 * @var string
 	 */
-	private $type;
+	protected $type;
 
 	/**
 	 * @param array $properties

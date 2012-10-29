@@ -5,10 +5,10 @@ class AudioFile extends RegularFile
 	/**
 	 * @var string
 	 */
-	private $codec;
+	protected $codec;
 
 	/**
 	 * @var int in seconds
 	 */
-	private $length;
+	protected $length;
 }

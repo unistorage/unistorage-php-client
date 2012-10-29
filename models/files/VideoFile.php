@@ -5,27 +5,27 @@ class VideoFile extends RegularFile
 	/**
 	 * @var string
 	 */
-	private $type = RegularFile::FILE_TYPE_VIDEO;
+	protected $type = RegularFile::FILE_TYPE_VIDEO;
 
 	/**
 	 * @var int
 	 */
-	private $width;
+	protected $width;
 
 	/**
 	 * @var int
 	 */
-	private $height;
+	protected $height;
 
 	/**
 	 * @var string
 	 */
-	private $codec;
+	protected $codec;
 
 	/**
 	 * @var int in seconds
 	 */
-	private $length;
+	protected $length;
 
 	/**
 	 * @param string $format

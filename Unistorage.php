@@ -1,5 +1,7 @@
 <?php namespace Unistorage;
 
+defined('UNISTORAGE_CLIENT') || define('UNISTORAGE_CLIENT', __DIR__);
+
 class Unistorage
 {
 	const STATUS_OK = 'ok';
@@ -24,7 +26,6 @@ class Unistorage
 	{
 		$this->host = $host;
 		$this->token = $token;
-		defined('UNISTORAGE_CLIENT') || define('UNISTORAGE_CLIENT', __DIR__);
 	}
 
 	/**
@@ -111,6 +112,7 @@ class Unistorage
 			else
 				$className = 'RegularFile';
 
+			$className = '\\Unistorage\\'.$className;
 			$properties = $this->convertToFieldNames($answer['data']);
 
 			return new $className($properties, $resourceUri, $answer['ttl']);
