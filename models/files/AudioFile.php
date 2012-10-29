@@ -1,5 +1,9 @@
 <?php namespace Unistorage;
 
+/**
+ * @property-read string $codec
+ * @property-read int $length
+ */
 class AudioFile extends RegularFile
 {
 	/**
@@ -11,4 +15,14 @@ class AudioFile extends RegularFile
 	 * @var int in seconds
 	 */
 	protected $length;
+
+	public function getCodec()
+	{
+		return $this->codec;
+	}
+
+	public function getLength()
+	{
+		return $this->length;
+	}
 }

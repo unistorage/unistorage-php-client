@@ -88,6 +88,8 @@ class Unistorage
 		$answer = $this->sendRequest($resourceUri);
 		if ($answer['status'] == self::STATUS_WAIT) {
 			return new PendingFile($resourceUri, $answer['ttl']);
+		} elseif (strpos($resourceUri, '/zip/') === 0) {
+			return new ZipFile($answer['data']['uri'], $resourceUri, $answer['ttl']);
 		} elseif (empty($answer['data']['mimetype'])) {
 			return new TemporaryFile($answer['data']['uri'], $resourceUri, $answer['ttl']);
 		} else {
@@ -143,7 +145,16 @@ class Unistorage
 	 */
 	public function createTemplate($actions, $applicableFor)
 	{
+		$postQuery = http_build_query(array(
+			'applicable_for' => $applicableFor,
+		));
+		foreach ($actions as $action => $params) {
+			$postQuery.= '&action[]='.urlencode(http_build_query(array('action' => $action) + $params));
+		}
 
+		$answer = $this->sendRequest('/template/', $postQuery, 'post');
+
+		return new Template($answer['resource_uri']);
 	}
 
 	/**
@@ -155,7 +166,11 @@ class Unistorage
 	 */
 	public function applyAction($file, $actionName, $actionParams)
 	{
+		$answer = $this->sendRequest($file->resourceUri, array(
+			'action' => $actionName,
+		) + $actionParams);
 
+		return $this->getFile( $answer['resource_uri'] );
 	}
 	
 	/**
@@ -166,7 +181,11 @@ class Unistorage
 	 */
 	public function applyTemplate($file, $template)
 	{
+		$answer = $this->sendRequest($file->resourceUri, array(
+			'template' => $template->resourceUri,
+		));
 
+		return $this->getFile( $answer['resource_uri'] );
 	}
 
 	/**
@@ -177,7 +196,16 @@ class Unistorage
 	 */
 	public function getZipped($files, $zipFileName)
 	{
+		$postQuery = http_build_query(array(
+			'filename' => $zipFileName,
+		));
+		foreach ($files as $file) {
+			$postQuery.= '&file[]='.urlencode($file->resourceUri);
+		}
 
+		$answer = $this->sendRequest('/zip/', $postQuery, 'post');
+
+		return $this->getFile( $answer['resource_uri'] );
 	}
 }
 

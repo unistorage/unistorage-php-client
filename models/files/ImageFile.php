@@ -1,5 +1,9 @@
 <?php namespace Unistorage;
 
+/**
+ * @property-read int $width
+ * @property-read int $height
+ */
 class ImageFile extends RegularFile
 {
 	/**
@@ -25,6 +29,16 @@ class ImageFile extends RegularFile
 	const CORNER_LEFT_BOTTOM = 'sw';
 	const CORNER_RIGHT_TOP = 'ne';
 	const CORNER_RIGHT_BOTTOM = 'se';
+
+	public function getHeight()
+	{
+		return $this->height;
+	}
+
+	public function getWidth()
+	{
+		return $this->width;
+	}
 
 	/**
 	 * @param string $mode

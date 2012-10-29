@@ -1,5 +1,11 @@
 <?php namespace Unistorage;
 
+/**
+ * @property-read int $width
+ * @property-read int $height
+ * @property-read string $codec
+ * @property-read int $length
+ */
 class VideoFile extends RegularFile
 {
 	/**
@@ -26,6 +32,26 @@ class VideoFile extends RegularFile
 	 * @var int in seconds
 	 */
 	protected $length;
+
+	public function getCodec()
+	{
+		return $this->codec;
+	}
+
+	public function getHeight()
+	{
+		return $this->height;
+	}
+
+	public function getLength()
+	{
+		return $this->length;
+	}
+
+	public function getWidth()
+	{
+		return $this->width;
+	}
 
 	/**
 	 * @param string $format

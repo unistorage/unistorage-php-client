@@ -15,6 +15,12 @@ class RegularFile extends File
 	const FILE_TYPE_VIDEO = 'video';
 	const FILE_TYPE_DOC = 'doc';
 
+	const ACTION_RESIZE = 'resize';
+	const ACTION_CONVERT = 'convert';
+	const ACTION_GRAYSCALE = 'grayscale';
+	const ACTION_ROTATE = 'rotate';
+	const ACTION_WATERMARK = 'watermark';
+
 	/**
 	 * @var string
 	 */

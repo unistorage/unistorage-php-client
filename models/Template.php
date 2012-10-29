@@ -10,6 +10,9 @@ class Template extends Component
 	 */
 	private $resourceUri;
 
+	/**
+	 * @param string $resourceUri
+	 */
 	function __construct($resourceUri)
 	{
 		$this->resourceUri = $resourceUri;

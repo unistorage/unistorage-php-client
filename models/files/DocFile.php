@@ -5,7 +5,7 @@ class DocFile extends RegularFile
 	/**
 	 * @var string
 	 */
-	private $type = RegularFile::FILE_TYPE_DOC;
+	protected $type = RegularFile::FILE_TYPE_DOC;
 
 	/**
 	 * @param string $format
