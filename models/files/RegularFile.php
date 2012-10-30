@@ -66,7 +66,7 @@ class RegularFile extends File
 	 */
 	public function apply($template)
 	{
-
+		return Unistorage::getInstance()->applyTemplate($this, $template);
 	}
 
 	public function getMimeType()

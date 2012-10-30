@@ -13,6 +13,8 @@ class DocFile extends RegularFile
 	 */
 	public function convert($format)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+			'to' => $format,
+		));
 	}
 }

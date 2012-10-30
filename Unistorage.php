@@ -19,13 +19,35 @@ class Unistorage
 	public $token;
 
 	/**
+	 * @var Unistorage
+	 */
+	private static $instance = null;
+
+	private function __construct() { }
+	private function __clone() { }
+
+	/**
 	 * @param string $host
 	 * @param string $token
+	 * @throws USException
 	 */
-	function __construct($host, $token)
+	public static function createInstance($host, $token)
 	{
-		$this->host = $host;
-		$this->token = $token;
+		if (is_null(self::$instance)) {
+			self::$instance = new Unistorage();
+			self::$instance->host = $host;
+			self::$instance->token = $token;
+		} else {
+			throw new USException('instance of Unistorage already created');
+		}
+	}
+
+	/**
+	 * @return null|Unistorage
+	 */
+	public static function getInstance()
+	{
+		return self::$instance;
 	}
 
 	/**
@@ -43,7 +65,7 @@ class Unistorage
 			),
 		);
 		if ($method == 'get')
-			$returnedData = \CurlHelper::getUrl($this->host.$endPoint.http_build_query($fields), $tokenHeader);
+			$returnedData = \CurlHelper::getUrl($this->host.$endPoint.'?'.http_build_query($fields), $tokenHeader);
 		else
 			$returnedData = \CurlHelper::postUrl($this->host.$endPoint, $fields, $tokenHeader);
 		$answer = json_decode($returnedData, true);
@@ -164,7 +186,7 @@ class Unistorage
 	 * @throws USException
 	 * @return File
 	 */
-	public function applyAction($file, $actionName, $actionParams)
+	public function applyAction($file, $actionName, $actionParams = array())
 	{
 		$answer = $this->sendRequest($file->resourceUri, array(
 			'action' => $actionName,

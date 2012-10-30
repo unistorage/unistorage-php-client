@@ -48,7 +48,11 @@ class ImageFile extends RegularFile
 	 */
 	public function resize($mode, $width, $height)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_RESIZE, array(
+			'mode' => $mode,
+			'w' => $width,
+			'h' => $height,
+		));
 	}
 
 	/**
@@ -57,7 +61,9 @@ class ImageFile extends RegularFile
 	 */
 	public function convert($format)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+			'to' => $format,
+		));
 	}
 
 	/**
@@ -65,16 +71,18 @@ class ImageFile extends RegularFile
 	 */
 	public function grayscale()
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_GRAYSCALE);
 	}
 
 	/**
-	 * @param int $angle CCW
+	 * @param int $angle 90, 180, 270. CCW
 	 * @return File
 	 */
 	public function rotate($angle)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_ROTATE, array(
+			'angle' => $angle,
+		));
 	}
 
 	/**
@@ -93,6 +101,13 @@ class ImageFile extends RegularFile
 	 */
 	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_WATERMARK, array(
+			'watermark' => $watermark->resourceUri,
+			'w' => $wmWidth,
+			'h' => $wmHeight,
+			'w_pad' => $horizontalPadding,
+			'h_pad' => $verticalPadding,
+			'corner' => $corner,
+		));
 	}
 }

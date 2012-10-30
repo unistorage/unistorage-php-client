@@ -61,7 +61,11 @@ class VideoFile extends RegularFile
 	 */
 	public function convert($format, $vCodec, $aCodec)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+			'to' => $format,
+			'vcodec' => $vCodec,
+			'acodec' => $aCodec,
+		));
 	}
 
 	/**
@@ -80,6 +84,13 @@ class VideoFile extends RegularFile
 	 */
 	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
 	{
-
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_WATERMARK, array(
+			'watermark' => $watermark->resourceUri,
+			'w' => $wmWidth,
+			'h' => $wmHeight,
+			'w_pad' => $horizontalPadding,
+			'h_pad' => $verticalPadding,
+			'corner' => $corner,
+		));
 	}
 }
