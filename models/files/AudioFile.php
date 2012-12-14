@@ -9,6 +9,11 @@ class AudioFile extends RegularFile
 	/**
 	 * @var string
 	 */
+	protected $type = RegularFile::FILE_TYPE_AUDIO;
+
+	/**
+	 * @var string
+	 */
 	protected $codec;
 
 	/**
@@ -24,5 +29,16 @@ class AudioFile extends RegularFile
 	public function getLength()
 	{
 		return $this->length;
+	}
+
+	/**
+	 * @param string $format
+	 * @return File
+	 */
+	public function convert($format)
+	{
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+			'to' => $format,
+		));
 	}
 }

@@ -69,6 +69,17 @@ class VideoFile extends RegularFile
 	}
 
 	/**
+	 * @param string $format
+	 * @return File
+	 */
+	public function extractAudio($format)
+	{
+		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_EXTRACT_AUDIO, array(
+			'to' => $format,
+		));
+	}
+
+	/**
 	 * $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding my have following format:
 	 * <ul>
 	 * <li> (\d+)px - number calculates in pixels
