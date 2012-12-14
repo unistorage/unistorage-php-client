@@ -3,6 +3,8 @@
 use Unistorage\Unistorage;
 use Unistorage\RegularFile;
 use Unistorage\ImageFile;
+use Unistorage\VideoFile;
+use Unistorage\AudioFile;
 use Unistorage\PendingFile;
 use Unistorage\TemporaryFile;
 
@@ -85,5 +87,26 @@ class UploadTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
 		$zipFile = Unistorage::getInstance()->getZipped(array($imageFile), 'zipName.zip');
 		$this->assertInstanceOf('\Unistorage\ZipFile', $zipFile);
+	}
+
+	public function testAudio()
+	{
+		/** @var $audioFile AudioFile */
+		$audioFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/AudioFile.m4r');
+		$this->assertInstanceOf('\Unistorage\AudioFile', $audioFile);
+	}
+
+	public function testVideo()
+	{
+		/** @var $videoFile VideoFile */
+		$videoFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/VideoFile.mov');
+		$this->assertInstanceOf('\Unistorage\VideoFile', $videoFile);
+
+		$resultFile = $videoFile->extractAudio('mp3');
+		$this->assertTrue(
+			$resultFile instanceof AudioFile ||
+				$resultFile instanceof TemporaryFile ||
+				$resultFile instanceof PendingFile,
+			'Failed asserting type of resultFile after extractAudio');
 	}
 }
