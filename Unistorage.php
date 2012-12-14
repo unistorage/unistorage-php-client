@@ -131,6 +131,8 @@ class Unistorage
 				$className = 'ImageFile';
 			else if (strpos($answer['data']['mimetype'], 'video/') === 0)
 				$className = 'VideoFile';
+			else if (strpos($answer['data']['mimetype'], 'audio/') === 0)
+				$className = 'AudioFile';
 			else if (in_array($answer['data']['mimetype'], $docFileMimeTypes))
 				$className = 'DocFile';
 			else

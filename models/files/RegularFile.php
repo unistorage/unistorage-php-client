@@ -11,6 +11,7 @@
  */
 class RegularFile extends File
 {
+	const FILE_TYPE_AUDIO = 'audio';
 	const FILE_TYPE_IMAGE = 'image';
 	const FILE_TYPE_VIDEO = 'video';
 	const FILE_TYPE_DOC = 'doc';
@@ -20,6 +21,7 @@ class RegularFile extends File
 	const ACTION_GRAYSCALE = 'grayscale';
 	const ACTION_ROTATE = 'rotate';
 	const ACTION_WATERMARK = 'watermark';
+	const ACTION_EXTRACT_AUDIO = 'extract_audio';
 
 	/**
 	 * @var string
