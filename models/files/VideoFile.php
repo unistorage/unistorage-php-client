@@ -1,57 +1,68 @@
 <?php namespace Unistorage;
 
 /**
- * @property-read int $width
- * @property-read int $height
- * @property-read string $codec
- * @property-read int $length
+ * @property-read int $videoWidth
+ * @property-read int $videoHeight
+ * @property-read string $videoCodec
+ * @property-read int $videoDuration
+ * @property-read int $videoBitrate
+ * @property-read int $videoFps
+ * @property-read int $audioSampleRate
+ * @property-read string $audioCodec
+ * @property-read int $audioBitrate
+ * @property-read int $audioDuration
  */
 class VideoFile extends RegularFile
 {
 	/**
-	 * @var string
+	 * @var int
 	 */
-	protected $type = RegularFile::FILE_TYPE_VIDEO;
+	protected $videoWidth;
 
 	/**
 	 * @var int
 	 */
-	protected $width;
-
-	/**
-	 * @var int
-	 */
-	protected $height;
+	protected $videoHeight;
 
 	/**
 	 * @var string
 	 */
-	protected $codec;
+	protected $videoCodec;
 
 	/**
 	 * @var int in seconds
 	 */
-	protected $length;
+	protected $videoDuration;
 
-	public function getCodec()
-	{
-		return $this->codec;
-	}
+	/**
+	 * @var int in bytes
+	 */
+	protected $videoBitrate;
 
-	public function getHeight()
-	{
-		return $this->height;
-	}
+	/**
+	 * @var int
+	 */
+	protected $videoFps;
 
-	public function getLength()
-	{
-		return $this->length;
-	}
+	/**
+	 * @var int
+	 */
+	protected $audioSampleRate;
 
-	public function getWidth()
-	{
-		return $this->width;
-	}
+	/**
+	 * @var string
+	 */
+	protected $audioCodec;
+
+	/**
+	 * @var int in bytes
+	 */
+	protected $audioBitrate;
+
+	/**
+	 * @var int
+	 */
+	protected $audioDuration;
 
 	/**
 	 * @param string $format
@@ -103,5 +114,85 @@ class VideoFile extends RegularFile
 			'h_pad' => $verticalPadding,
 			'corner' => $corner,
 		));
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getVideoWidth()
+	{
+		return $this->videoWidth;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getVideoHeight()
+	{
+		return $this->videoHeight;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVideoCodec()
+	{
+		return $this->videoCodec;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getVideoDuration()
+	{
+		return $this->videoDuration;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getVideoBitrate()
+	{
+		return $this->videoBitrate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getVideoFps()
+	{
+		return $this->videoFps;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAudioSampleRate()
+	{
+		return $this->audioSampleRate;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAudioCodec()
+	{
+		return $this->audioCodec;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAudioBitrate()
+	{
+		return $this->audioBitrate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAudioDuration()
+	{
+		return $this->audioDuration;
 	}
 }

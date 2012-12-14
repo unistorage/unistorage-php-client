@@ -115,28 +115,15 @@ class Unistorage
 		} elseif (empty($answer['data']['mimetype'])) {
 			return new TemporaryFile($answer['data']['uri'], $resourceUri, $answer['ttl']);
 		} else {
-			static $docFileMimeTypes = array("application/msword",
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-				"application/vnd.oasis.opendocument.text",
-				"application/pdf",
-				"application/vnd.pdf",
-				"application/x-pdf",
-				"application/rtf",
-				"application/x-rtf",
-				"text/richtext",
-				"text/plain",
-				"text/html");
+			static $unistorageTypeToClassName = array(
+				'image' => 'ImageFile',
+				'video' => 'VideoFile',
+				'audio' => 'AudioFile',
+				'doc' => 'DocFile',
+				'unknown' => 'RegularFile',
+			);
 
-			if (strpos($answer['data']['mimetype'], 'image/') === 0)
-				$className = 'ImageFile';
-			else if (strpos($answer['data']['mimetype'], 'video/') === 0)
-				$className = 'VideoFile';
-			else if (strpos($answer['data']['mimetype'], 'audio/') === 0)
-				$className = 'AudioFile';
-			else if (in_array($answer['data']['mimetype'], $docFileMimeTypes))
-				$className = 'DocFile';
-			else
-				$className = 'RegularFile';
+			$className = $unistorageTypeToClassName[ $answer['data']['unistorage_type'] ];
 
 			$className = '\\Unistorage\\'.$className;
 			$properties = $this->convertToFieldNames($answer['data']);
@@ -153,8 +140,18 @@ class Unistorage
 	{
 		$answerData['mimeType'] = $answerData['mimetype'];
 		unset($answerData['mimetype']);
+
+		$answerData['unistorageType'] = $answerData['unistorage_type'];
+		unset($answerData['unistorageType']);
+
 		foreach ($answerData['extra'] as $id => $value) {
-			$answerData[$id] = $value;
+			if (is_array($value)) {
+				foreach ($value as $id2 => $value2) {
+					$answerData[$this->normalizeFieldName($id.'_'.$id2)] = $value;
+				}
+			} else {
+				$answerData[$this->normalizeFieldName($id)] = $value;
+			}
 		}
 		unset($answerData['extra']);
 
@@ -162,8 +159,20 @@ class Unistorage
 	}
 
 	/**
+	 * convert sample_name to sampleName (underscore style to camelCase style)
+	 * @param string $name
+	 * @return string
+	 */
+	private function normalizeFieldName($name)
+	{
+		return preg_replace_callback('#_(.)#', function($matches) {
+			return strtoupper($matches[1]);
+		}, $name);
+	}
+
+	/**
 	 * @param array $actions array( actionName => array with action params)
-	 * @param string $applicableFor file type. One of RegularFile::FILE_TYPE_*
+	 * @param string $applicableFor file unistorageType. One of RegularFile::FILE_TYPE_*
 	 * @throws USException
 	 * @return Template
 	 */

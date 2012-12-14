@@ -108,5 +108,20 @@ class UploadTest extends PHPUnit_Framework_TestCase
 				$resultFile instanceof TemporaryFile ||
 				$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after extractAudio');
+
+		$this->assertNotEmpty($videoFile->audioBitrate);
+		$this->assertNotEmpty($videoFile->audioCodec);
+		$this->assertNotEmpty($videoFile->audioDuration);
+		$this->assertNotEmpty($videoFile->audioSampleRate);
+		$this->assertNotEmpty($videoFile->videoBitrate);
+		$this->assertNotEmpty($videoFile->videoCodec);
+		$this->assertNotEmpty($videoFile->videoDuration);
+		$this->assertNotEmpty($videoFile->videoFps);
+		$this->assertNotEmpty($videoFile->videoHeight);
+		$this->assertNotEmpty($videoFile->videoWidth);
+		$this->assertNotEmpty($videoFile->mimeType);
+		$this->assertNotEmpty($videoFile->size);
+		$this->assertNotEmpty($videoFile->url);
+		$this->assertNotEmpty($videoFile->url);
 	}
 }

@@ -9,11 +9,6 @@ class AudioFile extends RegularFile
 	/**
 	 * @var string
 	 */
-	protected $type = RegularFile::FILE_TYPE_AUDIO;
-
-	/**
-	 * @var string
-	 */
 	protected $codec;
 
 	/**

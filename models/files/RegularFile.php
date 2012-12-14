@@ -6,8 +6,8 @@
  * @property-read string $mimeType
  * @property-read string $name
  * @property-read int $size
- * @property-read string $uri
- * @property-read string $type
+ * @property-read string $url
+ * @property-read string $unistorageType
  */
 class RegularFile extends File
 {
@@ -29,7 +29,7 @@ class RegularFile extends File
 	protected $mimeType;
 
 	/**
-	 * @var string
+	 * @var string file name
 	 */
 	protected $name;
 
@@ -41,12 +41,12 @@ class RegularFile extends File
 	/**
 	 * @var string
 	 */
-	protected $uri;
+	protected $url;
 
 	/**
-	 * @var string
+	 * @var string one of RegularFile::FILE_TYPE_*
 	 */
-	protected $type;
+	protected $unistorageType;
 
 	/**
 	 * @param array $properties
@@ -86,13 +86,13 @@ class RegularFile extends File
 		return $this->size;
 	}
 
-	public function getType()
+	public function getUnistorageType()
 	{
-		return $this->type;
+		return $this->unistorageType;
 	}
 
-	public function getUri()
+	public function getUrl()
 	{
-		return $this->uri;
+		return $this->url;
 	}
 }

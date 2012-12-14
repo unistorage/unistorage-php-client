@@ -7,11 +7,6 @@
 class ImageFile extends RegularFile
 {
 	/**
-	 * @var string
-	 */
-	protected $type = RegularFile::FILE_TYPE_IMAGE;
-
-	/**
 	 * @var int
 	 */
 	protected $width;
