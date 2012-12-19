@@ -97,7 +97,6 @@ class Unistorage
 
 			$className = '\\Unistorage\\'.$className;
 			$properties = $this->convertToFieldNames($answer['data']);
-			$properties['unistorage'] = $this;
 
 			return new $className($properties, $resourceUri, $answer['ttl']);
 		}
