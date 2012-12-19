@@ -70,6 +70,10 @@ class Unistorage
 		return $this->getFile( $answer['resource_uri'] );
 	}
 
+	protected function getFilesNamespace() {
+		return '\\Unistorage\\';
+	}
+
 	/**
 	 * @param string $resourceUri
 	 * @throws USException
@@ -95,7 +99,7 @@ class Unistorage
 
 			$className = $unistorageTypeToClassName[ $answer['data']['unistorage_type'] ];
 
-			$className = '\\Unistorage\\'.$className;
+			$className = $this->getFilesNamespace().$className;
 			$properties = $this->convertToFieldNames($answer['data']);
 
 			return new $className($properties, $resourceUri, $answer['ttl']);
