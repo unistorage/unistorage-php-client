@@ -24,7 +24,7 @@ class TemporaryFile extends File
 		$this->url = $url;
 	}
 
-	public function getUri()
+	public function getUrl()
 	{
 		return $this->url;
 	}
