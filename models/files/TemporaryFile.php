@@ -3,29 +3,29 @@
 /**
  * File is not ready, but you can use alternate uri
  *
- * @property-read string uri
+ * @property-read string url
  */
 class TemporaryFile extends File
 {
 	/**
 	 * @var string
 	 */
-	protected $uri;
+	protected $url;
 
 	/**
-	 * @param string $uri
+	 * @param string $url
 	 * @param string $resourceUri
 	 * @param int $ttl
 	 */
-	function __construct($uri, $resourceUri, $ttl)
+	function __construct($url, $resourceUri, $ttl)
 	{
 		parent::__construct($resourceUri, $ttl);
 
-		$this->uri = $uri;
+		$this->url = $url;
 	}
 
 	public function getUri()
 	{
-		return $this->uri;
+		return $this->url;
 	}
 }

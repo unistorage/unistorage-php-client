@@ -44,11 +44,15 @@ class ImageFile extends RegularFile
 	 */
 	public function resize($unistorage, $mode, $width, $height)
 	{
-		return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, array(
+		$actionParams = array(
 			'mode' => $mode,
-			'w' => $width,
-			'h' => $height,
-		));
+		);
+		if (!empty($width))
+			$actionParams['w'] = $width;
+		if (!empty($height))
+			$actionParams['h'] = $height;
+
+		return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, $actionParams);
 	}
 
 	/**
