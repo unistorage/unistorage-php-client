@@ -10,46 +10,50 @@ use Unistorage\TemporaryFile;
 
 class UploadTest extends PHPUnit_Framework_TestCase
 {
+	/** @var Unistorage */
+	private $unistorage;
 
 	protected function setUp()
 	{
-		if (is_null(Unistorage::getInstance())) {
+		if (is_null($this->unistorage)) {
 			$params = require(__DIR__.'/../params.php');
-			Unistorage::createInstance($params['host'], $params['token']);
+			$this->unistorage = new Unistorage();
+			$this->unistorage->host = $params['host'];
+			$this->unistorage->token = $params['token'];
 		}
 	}
 
 	public function testImage()
 	{
 		/** @var $imageFile ImageFile */
-		$imageFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
+		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
 		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
 
-		$resultFile = $imageFile->convert('png');
+		$resultFile = $imageFile->convert($this->unistorage, 'png');
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after convert');
-		$resultFile = $imageFile->grayscale();
+		$resultFile = $imageFile->grayscale($this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after grayscale');
-		$resultFile = $imageFile->resize(\Unistorage\ImageFile::MODE_CROP, 50, 50);
+		$resultFile = $imageFile->resize($this->unistorage, \Unistorage\ImageFile::MODE_CROP, 50, 50);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after resize');
-		$resultFile = $imageFile->rotate(90);
+		$resultFile = $imageFile->rotate($this->unistorage, 90);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after rotate');
-		$resultFile = $imageFile->watermark($imageFile, 20, 20, 20, 20, \Unistorage\ImageFile::CORNER_RIGHT_BOTTOM);
+		$resultFile = $imageFile->watermark($this->unistorage, $imageFile, 20, 20, 20, 20, \Unistorage\ImageFile::CORNER_RIGHT_BOTTOM);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
@@ -59,7 +63,7 @@ class UploadTest extends PHPUnit_Framework_TestCase
 
 	public function testTemplate()
 	{
-		$template = Unistorage::getInstance()->createTemplate(array(
+		$template = $this->unistorage->createTemplate(array(
 			RegularFile::ACTION_RESIZE => array(
 				'mode' => ImageFile::MODE_KEEP,
 				'w' => 50,
@@ -70,10 +74,10 @@ class UploadTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('\Unistorage\Template', $template);
 
 		/** @var $imageFile ImageFile */
-		$imageFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
+		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
 		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
 
-		$resultFile = $imageFile->apply($template);
+		$resultFile = $imageFile->apply($this->unistorage, $template);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 				$resultFile instanceof TemporaryFile ||
@@ -83,26 +87,26 @@ class UploadTest extends PHPUnit_Framework_TestCase
 
 	public function testCreateZip()
 	{
-		$imageFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
+		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
 		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
-		$zipFile = Unistorage::getInstance()->getZipped(array($imageFile), 'zipName.zip');
+		$zipFile = $this->unistorage->getZipped(array($imageFile), 'zipName.zip');
 		$this->assertInstanceOf('\Unistorage\ZipFile', $zipFile);
 	}
 
 	public function testAudio()
 	{
 		/** @var $audioFile AudioFile */
-		$audioFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/AudioFile.m4r');
+		$audioFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/AudioFile.m4r');
 		$this->assertInstanceOf('\Unistorage\AudioFile', $audioFile);
 	}
 
 	public function testVideo()
 	{
 		/** @var $videoFile VideoFile */
-		$videoFile = Unistorage::getInstance()->uploadFile(FIXTURES_DIR.'/VideoFile.mov');
+		$videoFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/VideoFile.mov');
 		$this->assertInstanceOf('\Unistorage\VideoFile', $videoFile);
 
-		$resultFile = $videoFile->extractAudio('mp3');
+		$resultFile = $videoFile->extractAudio($this->unistorage, 'mp3');
 		$this->assertTrue(
 			$resultFile instanceof AudioFile ||
 				$resultFile instanceof TemporaryFile ||

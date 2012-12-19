@@ -65,14 +65,15 @@ class VideoFile extends RegularFile
 	protected $audioDuration;
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @param string $vCodec
 	 * @param string $aCodec
 	 * @return File
 	 */
-	public function convert($format, $vCodec, $aCodec)
+	public function convert($unistorage, $format, $vCodec, $aCodec)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,
 			'vcodec' => $vCodec,
 			'acodec' => $aCodec,
@@ -80,12 +81,13 @@ class VideoFile extends RegularFile
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @return File
 	 */
-	public function extractAudio($format)
+	public function extractAudio($unistorage, $format)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_EXTRACT_AUDIO, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_EXTRACT_AUDIO, array(
 			'to' => $format,
 		));
 	}
@@ -96,6 +98,7 @@ class VideoFile extends RegularFile
 	 * <li> (\d+)px - number calculates in pixels
 	 * <li> (\d+) - number calculates in percents
 	 * </ul>
+	 * @param Unistorage $unistorage
 	 * @param ImageFile $watermark
 	 * @param string $wmWidth watermark width
 	 * @param string $wmHeight watermark height
@@ -104,9 +107,9 @@ class VideoFile extends RegularFile
 	 * @param string $corner one of ImageFile::CORNER_*
 	 * @return File
 	 */
-	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
+	public function watermark($unistorage, $watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_WATERMARK, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_WATERMARK, array(
 			'watermark' => $watermark->resourceUri,
 			'w' => $wmWidth,
 			'h' => $wmHeight,

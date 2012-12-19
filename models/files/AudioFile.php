@@ -27,12 +27,13 @@ class AudioFile extends RegularFile
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @return File
 	 */
-	public function convert($format)
+	public function convert($unistorage, $format)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,
 		));
 	}

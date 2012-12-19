@@ -36,14 +36,15 @@ class ImageFile extends RegularFile
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param string $mode
 	 * @param int $width
 	 * @param int $height
 	 * @return File
 	 */
-	public function resize($mode, $width, $height)
+	public function resize($unistorage, $mode, $width, $height)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_RESIZE, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, array(
 			'mode' => $mode,
 			'w' => $width,
 			'h' => $height,
@@ -51,31 +52,34 @@ class ImageFile extends RegularFile
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @return File
 	 */
-	public function convert($format)
+	public function convert($unistorage, $format)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_CONVERT, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,
 		));
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function grayscale()
+	public function grayscale($unistorage)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_GRAYSCALE);
+		return $unistorage->applyAction($this, RegularFile::ACTION_GRAYSCALE);
 	}
 
 	/**
+	 * @param Unistorage $unistorage
 	 * @param int $angle 90, 180, 270. CCW
 	 * @return File
 	 */
-	public function rotate($angle)
+	public function rotate($unistorage, $angle)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_ROTATE, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_ROTATE, array(
 			'angle' => $angle,
 		));
 	}
@@ -86,6 +90,7 @@ class ImageFile extends RegularFile
 	 * <li> (\d+)px - number calculates in pixels
 	 * <li> (\d+) - number calculates in percents
 	 * </ul>
+	 * @param Unistorage $unistorage
 	 * @param ImageFile $watermark
 	 * @param string $wmWidth watermark width
 	 * @param string $wmHeight watermark height
@@ -94,9 +99,9 @@ class ImageFile extends RegularFile
 	 * @param string $corner one of ImageFile::CORNER_*
 	 * @return File
 	 */
-	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
+	public function watermark($unistorage, $watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
 	{
-		return Unistorage::getInstance()->applyAction($this, RegularFile::ACTION_WATERMARK, array(
+		return $unistorage->applyAction($this, RegularFile::ACTION_WATERMARK, array(
 			'watermark' => $watermark->resourceUri,
 			'w' => $wmWidth,
 			'h' => $wmHeight,

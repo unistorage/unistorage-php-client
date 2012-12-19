@@ -2,6 +2,8 @@
 
 defined('UNISTORAGE_CLIENT') || define('UNISTORAGE_CLIENT', __DIR__);
 
+require_once(__DIR__.'/autoload.php');
+
 class Unistorage
 {
 	const STATUS_OK = 'ok';
@@ -17,38 +19,6 @@ class Unistorage
 	 * @var string Unistorage access token
 	 */
 	public $token;
-
-	/**
-	 * @var Unistorage
-	 */
-	private static $instance = null;
-
-	private function __construct() { }
-	private function __clone() { }
-
-	/**
-	 * @param string $host
-	 * @param string $token
-	 * @throws USException
-	 */
-	public static function createInstance($host, $token)
-	{
-		if (is_null(self::$instance)) {
-			self::$instance = new Unistorage();
-			self::$instance->host = $host;
-			self::$instance->token = $token;
-		} else {
-			throw new USException('instance of Unistorage already created');
-		}
-	}
-
-	/**
-	 * @return null|Unistorage
-	 */
-	public static function getInstance()
-	{
-		return self::$instance;
-	}
 
 	/**
 	 * @param string $endPoint
@@ -127,6 +97,7 @@ class Unistorage
 
 			$className = '\\Unistorage\\'.$className;
 			$properties = $this->convertToFieldNames($answer['data']);
+			$properties['unistorage'] = $this;
 
 			return new $className($properties, $resourceUri, $answer['ttl']);
 		}
