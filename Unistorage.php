@@ -9,6 +9,7 @@ class Unistorage
 	const STATUS_OK = 'ok';
 	const STATUS_ERROR = 'error';
 	const STATUS_WAIT = 'wait';
+	const STATUS_JUST_URI = 'just_uri';
 
 	/**
 	 * @var string Unistorage host
@@ -85,9 +86,9 @@ class Unistorage
 		if ($answer['status'] == self::STATUS_WAIT) {
 			return new PendingFile($resourceUri, $answer['ttl']);
 		} elseif (strpos($resourceUri, '/zip/') === 0) {
-			return new ZipFile($answer['data']['uri'], $resourceUri, $answer['ttl']);
-		} elseif (empty($answer['data']['mimetype'])) {
-			return new TemporaryFile($answer['data']['uri'], $resourceUri, $answer['ttl']);
+			return new ZipFile($answer['data']['url'], $resourceUri, $answer['ttl']);
+		} elseif ($answer['status'] == self::STATUS_JUST_URI) {
+			return new TemporaryFile($answer['data']['url'], $resourceUri, $answer['ttl']);
 		} else {
 			static $unistorageTypeToClassName = array(
 				'image' => 'ImageFile',
