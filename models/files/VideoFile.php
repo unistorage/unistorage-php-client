@@ -120,6 +120,20 @@ class VideoFile extends RegularFile
 	}
 
 	/**
+	 * @param Unistorage $unistorage
+	 * @param string $format
+	 * @param integer $position
+	 * @return File
+	 */
+	public function captureFrame($unistorage, $format, $position)
+	{
+		return $unistorage->applyAction($this, 'capture_frame', array(
+			'to' => $format,
+			'position' => $position,
+		));
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getVideoWidth()

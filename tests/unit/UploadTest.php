@@ -127,5 +127,12 @@ class UploadTest extends PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($videoFile->size);
 		$this->assertNotEmpty($videoFile->url);
 		$this->assertNotEmpty($videoFile->url);
+
+		$resultFile = $videoFile->captureFrame($this->unistorage, 'jpg', 0);
+		$this->assertTrue(
+			$resultFile instanceof ImageFile ||
+				$resultFile instanceof TemporaryFile ||
+				$resultFile instanceof PendingFile,
+			'Failed asserting type of resultFile after captureFrame');
 	}
 }
