@@ -56,13 +56,16 @@ class Unistorage
 
 	/**
 	 * @param string $filePath
+	 * @param string $filename
 	 * @param null|string $typeId used for internal unistorage statistics
-	 * @throws USException
 	 * @return File
 	 */
-	public function uploadFile($filePath, $typeId = null)
+	public function uploadFile($filePath, $filename='', $typeId = null)
 	{
-		$fields = array('file' => '@'.$filePath);
+		if (empty($filename))
+			$filename = pathinfo($filePath, PATHINFO_BASENAME);
+
+		$fields = array('file' => "@$filePath;filename=$filename");
 		if (!is_null($typeId)) {
 			$fields+= array('type_id' => $typeId);
 		}
@@ -122,7 +125,7 @@ class Unistorage
 		foreach ($answerData['extra'] as $id => $value) {
 			if (is_array($value)) {
 				foreach ($value as $id2 => $value2) {
-					$answerData[$this->normalizeFieldName($id.'_'.$id2)] = $value;
+					$answerData[$this->normalizeFieldName($id.'_'.$id2)] = $value2;
 				}
 			} else {
 				$answerData[$this->normalizeFieldName($id)] = $value;
@@ -180,7 +183,7 @@ class Unistorage
 
 		return $this->getFile( $answer['resource_uri'] );
 	}
-	
+
 	/**
 	 * @param RegularFile $file
 	 * @param Template $template
