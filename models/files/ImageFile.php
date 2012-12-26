@@ -36,13 +36,13 @@ class ImageFile extends RegularFile
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $mode
 	 * @param int $width
 	 * @param int $height
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function resize($unistorage, $mode, $width, $height)
+	public function resize($mode, $width, $height, $unistorage)
 	{
 		$actionParams = array(
 			'mode' => $mode,
@@ -56,11 +56,11 @@ class ImageFile extends RegularFile
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $format
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function convert($unistorage, $format)
+	public function convert($format, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,
@@ -77,11 +77,11 @@ class ImageFile extends RegularFile
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param int $angle 90, 180, 270. CCW
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function rotate($unistorage, $angle)
+	public function rotate($angle, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_ROTATE, array(
 			'angle' => $angle,
@@ -94,16 +94,16 @@ class ImageFile extends RegularFile
 	 * <li> (\d+)px - number calculates in pixels
 	 * <li> (\d+) - number calculates in percents
 	 * </ul>
-	 * @param Unistorage $unistorage
 	 * @param ImageFile $watermark
 	 * @param string $wmWidth watermark width
 	 * @param string $wmHeight watermark height
 	 * @param string $horizontalPadding padding of watermark
 	 * @param string $verticalPadding padding of watermark
 	 * @param string $corner one of ImageFile::CORNER_*
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function watermark($unistorage, $watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
+	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_WATERMARK, array(
 			'watermark' => $watermark->resourceUri,

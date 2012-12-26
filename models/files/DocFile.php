@@ -3,11 +3,11 @@
 class DocFile extends RegularFile
 {
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $format
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function convert($unistorage, $format)
+	public function convert($format, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,

@@ -63,11 +63,11 @@ class RegularFile extends File
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param Template $template
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function apply($unistorage, $template)
+	public function apply($template, $unistorage)
 	{
 		return $unistorage->applyTemplate($this, $template);
 	}

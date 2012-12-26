@@ -65,13 +65,13 @@ class VideoFile extends RegularFile
 	protected $audioDuration;
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @param string $vCodec
 	 * @param string $aCodec
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function convert($unistorage, $format, $vCodec, $aCodec)
+	public function convert($format, $vCodec, $aCodec, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
 			'to' => $format,
@@ -81,11 +81,11 @@ class VideoFile extends RegularFile
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $format
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function extractAudio($unistorage, $format)
+	public function extractAudio($format, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_EXTRACT_AUDIO, array(
 			'to' => $format,
@@ -98,16 +98,16 @@ class VideoFile extends RegularFile
 	 * <li> (\d+)px - number calculates in pixels
 	 * <li> (\d+) - number calculates in percents
 	 * </ul>
-	 * @param Unistorage $unistorage
 	 * @param ImageFile $watermark
 	 * @param string $wmWidth watermark width
 	 * @param string $wmHeight watermark height
 	 * @param string $horizontalPadding padding of watermark
 	 * @param string $verticalPadding padding of watermark
 	 * @param string $corner one of ImageFile::CORNER_*
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function watermark($unistorage, $watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner)
+	public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner, $unistorage)
 	{
 		return $unistorage->applyAction($this, RegularFile::ACTION_WATERMARK, array(
 			'watermark' => $watermark->resourceUri,
@@ -120,12 +120,12 @@ class VideoFile extends RegularFile
 	}
 
 	/**
-	 * @param Unistorage $unistorage
 	 * @param string $format
 	 * @param integer $position
+	 * @param Unistorage $unistorage
 	 * @return File
 	 */
-	public function captureFrame($unistorage, $format, $position)
+	public function captureFrame($format, $position, $unistorage)
 	{
 		return $unistorage->applyAction($this, 'capture_frame', array(
 			'to' => $format,
