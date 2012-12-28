@@ -36,7 +36,7 @@ class Unistorage
 			),
 		);
 		if ($method == 'get')
-			$returnedData = \CurlHelper::getUrl($this->host.$endPoint.'?'.http_build_query($fields), $tokenHeader);
+			$returnedData = \CurlHelper::getUrl($this->host.$endPoint.(!empty($fields) ? '?'.http_build_query($fields) : ''), $tokenHeader);
 		else
 			$returnedData = \CurlHelper::postUrl($this->host.$endPoint, $fields, $tokenHeader);
 		$answer = json_decode($returnedData, true);
