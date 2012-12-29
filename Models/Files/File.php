@@ -1,4 +1,6 @@
-<?php namespace Unistorage;
+<?php namespace Unistorage\Models\Files;
+
+use Unistorage\Models\Component;
 
 /**
  * @property-read int $ttl

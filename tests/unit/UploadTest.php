@@ -1,12 +1,12 @@
 <?php
 
 use Unistorage\Unistorage;
-use Unistorage\RegularFile;
-use Unistorage\ImageFile;
-use Unistorage\VideoFile;
-use Unistorage\AudioFile;
-use Unistorage\PendingFile;
-use Unistorage\TemporaryFile;
+use Unistorage\Models\Files\RegularFile;
+use Unistorage\Models\Files\ImageFile;
+use Unistorage\Models\Files\VideoFile;
+use Unistorage\Models\Files\AudioFile;
+use Unistorage\Models\Files\PendingFile;
+use Unistorage\Models\Files\TemporaryFile;
 
 class UploadTest extends PHPUnit_Framework_TestCase
 {
@@ -27,9 +27,9 @@ class UploadTest extends PHPUnit_Framework_TestCase
 	{
 		/** @var $imageFile ImageFile */
 		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
-		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\ImageFile', $imageFile);
 
-		$resultFile = $imageFile->convert($this->unistorage, 'png');
+		$resultFile = $imageFile->convert('png', $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
@@ -41,19 +41,19 @@ class UploadTest extends PHPUnit_Framework_TestCase
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after grayscale');
-		$resultFile = $imageFile->resize($this->unistorage, \Unistorage\ImageFile::MODE_CROP, 50, 50);
+		$resultFile = $imageFile->resize(ImageFile::MODE_CROP, 50, 50, $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after resize');
-		$resultFile = $imageFile->rotate($this->unistorage, 90);
+		$resultFile = $imageFile->rotate(90, $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
 			$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after rotate');
-		$resultFile = $imageFile->watermark($this->unistorage, $imageFile, 20, 20, 20, 20, \Unistorage\ImageFile::CORNER_RIGHT_BOTTOM);
+		$resultFile = $imageFile->watermark($imageFile, 20, 20, 20, 20, ImageFile::CORNER_RIGHT_BOTTOM, $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 			$resultFile instanceof TemporaryFile ||
@@ -71,13 +71,13 @@ class UploadTest extends PHPUnit_Framework_TestCase
 			),
 			RegularFile::ACTION_GRAYSCALE => array(),
 		), RegularFile::FILE_TYPE_IMAGE);
-		$this->assertInstanceOf('\Unistorage\Template', $template);
+		$this->assertInstanceOf('Unistorage\Models\Template', $template);
 
 		/** @var $imageFile ImageFile */
 		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
-		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\ImageFile', $imageFile);
 
-		$resultFile = $imageFile->apply($this->unistorage, $template);
+		$resultFile = $imageFile->apply($template, $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 				$resultFile instanceof TemporaryFile ||
@@ -88,25 +88,25 @@ class UploadTest extends PHPUnit_Framework_TestCase
 	public function testCreateZip()
 	{
 		$imageFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/ImageFile.jpg');
-		$this->assertInstanceOf('\Unistorage\ImageFile', $imageFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\ImageFile', $imageFile);
 		$zipFile = $this->unistorage->getZipped(array($imageFile), 'zipName.zip');
-		$this->assertInstanceOf('\Unistorage\ZipFile', $zipFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\ZipFile', $zipFile);
 	}
 
 	public function testAudio()
 	{
 		/** @var $audioFile AudioFile */
 		$audioFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/AudioFile.m4r');
-		$this->assertInstanceOf('\Unistorage\AudioFile', $audioFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\AudioFile', $audioFile);
 	}
 
 	public function testVideo()
 	{
 		/** @var $videoFile VideoFile */
 		$videoFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/VideoFile.mov');
-		$this->assertInstanceOf('\Unistorage\VideoFile', $videoFile);
+		$this->assertInstanceOf('Unistorage\Models\Files\VideoFile', $videoFile);
 
-		$resultFile = $videoFile->extractAudio($this->unistorage, 'mp3');
+		$resultFile = $videoFile->extractAudio('mp3', $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof AudioFile ||
 				$resultFile instanceof TemporaryFile ||
@@ -128,7 +128,7 @@ class UploadTest extends PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($videoFile->url);
 		$this->assertNotEmpty($videoFile->url);
 
-		$resultFile = $videoFile->captureFrame($this->unistorage, 'jpg', 0);
+		$resultFile = $videoFile->captureFrame('jpeg', 0, $this->unistorage);
 		$this->assertTrue(
 			$resultFile instanceof ImageFile ||
 				$resultFile instanceof TemporaryFile ||

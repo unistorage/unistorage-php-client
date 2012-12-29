@@ -1,6 +1,11 @@
 <?php namespace Unistorage;
 
-defined('UNISTORAGE_CLIENT') || define('UNISTORAGE_CLIENT', __DIR__);
+use Unistorage\Models\Files\File;
+use Unistorage\Models\Files\PendingFile;
+use Unistorage\Models\Files\RegularFile;
+use Unistorage\Models\Files\TemporaryFile;
+use Unistorage\Models\Files\ZipFile;
+use Unistorage\Models\Template;
 
 require_once(__DIR__.'/autoload.php');
 
@@ -75,7 +80,7 @@ class Unistorage
 	}
 
 	protected function getFilesNamespace() {
-		return '\\Unistorage\\';
+		return 'Unistorage\\Models\\Files\\';
 	}
 
 	/**

@@ -1,4 +1,6 @@
-<?php namespace Unistorage;
+<?php namespace Unistorage\Models;
+
+use Unistorage\USException;
 
 class Component
 {

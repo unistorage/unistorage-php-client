@@ -1,4 +1,7 @@
-<?php namespace Unistorage;
+<?php namespace Unistorage\Models\Files;
+
+use Unistorage\Models\Template;
+use Unistorage\Unistorage;
 
 /**
  * Common file

@@ -1,4 +1,4 @@
-<?php namespace Unistorage;
+<?php namespace Unistorage\Models\Files;
 
 /**
  * @property-read string $uri

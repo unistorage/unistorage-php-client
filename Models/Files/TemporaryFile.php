@@ -1,4 +1,6 @@
-<?php namespace Unistorage;
+<?php namespace Unistorage\Models\Files;
+
+use Unistorage\Unistorage;
 
 /**
  * File is not ready, but you can use alternate uri

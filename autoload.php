@@ -1,18 +1,21 @@
-<?php namespace Unistorage;
+<?php
 
-$success = spl_autoload_register(function ($className) {
-	static $includeDirs = array(
-		'/models',
-		'/models/files',
-		'/helpers/CurlHelper',
-	);
+$success = spl_autoload_register(function ($className)
+{
+	if ($className == 'CurlHelper') {
+		require(__DIR__.'/helpers/CurlHelper/CurlHelper.php');
+		return true;
+	}
 
-	if (strpos($className, 'Unistorage\\') === 0)
-		$className = substr($className, strlen('Unistorage\\'));
+	if (strpos($className, 'Unistorage\\') !== false) {
+		$classFile = substr($className, strlen('Unistorage\\'));
+		$classFile = str_replace('\\', '/', $classFile);
 
-	foreach ($includeDirs as $dir)
-		if (file_exists(UNISTORAGE_CLIENT.$dir.'/'.$className.'.php'))
-			require_once(UNISTORAGE_CLIENT.$dir.'/'.$className.'.php');
+		require_once(__DIR__.'/'.$classFile.'.php');
+		return true;
+	} else {
+		return false;
+	}
 });
 
 if (!$success)
