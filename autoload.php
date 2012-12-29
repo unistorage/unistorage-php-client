@@ -7,10 +7,11 @@ $success = spl_autoload_register(function ($className)
 		return true;
 	}
 
-	if (strpos($className, 'Unistorage\\') !== false) {
+	if (strpos($className, 'Unistorage\\') === 0) {
 		$classFile = substr($className, strlen('Unistorage\\'));
 		$classFile = str_replace('\\', '/', $classFile);
 
+		/** @noinspection PhpIncludeInspection */
 		require_once(__DIR__.'/'.$classFile.'.php');
 		return true;
 	} else {
