@@ -3,16 +3,18 @@
 use Unistorage\Unistorage;
 
 /**
+ * @property-read string $format
  * @property-read int $videoWidth
  * @property-read int $videoHeight
  * @property-read string $videoCodec
- * @property-read int $videoDuration
+ * @property-read float $videoDuration
  * @property-read int $videoBitrate
  * @property-read int $videoFps
  * @property-read int $audioSampleRate
  * @property-read string $audioCodec
  * @property-read int $audioBitrate
- * @property-read int $audioDuration
+ * @property-read float $audioDuration
+ * @property-read int $audioChannels
  */
 class VideoFile extends RegularFile
 {
@@ -32,7 +34,7 @@ class VideoFile extends RegularFile
 	protected $videoCodec;
 
 	/**
-	 * @var int in seconds
+	 * @var float in seconds
 	 */
 	protected $videoDuration;
 
@@ -47,7 +49,7 @@ class VideoFile extends RegularFile
 	protected $videoFps;
 
 	/**
-	 * @var int
+	 * @var int in Hz
 	 */
 	protected $audioSampleRate;
 
@@ -62,9 +64,19 @@ class VideoFile extends RegularFile
 	protected $audioBitrate;
 
 	/**
-	 * @var int
+	 * @var float in seconds
 	 */
 	protected $audioDuration;
+
+	/**
+	 * @var int
+	 */
+	protected $audioChannels;
+
+	/**
+	 * @var string
+	 */
+	protected $format;
 
 	/**
 	 * @param string $format
@@ -214,4 +226,21 @@ class VideoFile extends RegularFile
 	{
 		return $this->audioDuration;
 	}
+
+    /**
+     * @return int
+     */
+    public function getAudioChannels()
+    {
+        return $this->audioChannels;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
 }

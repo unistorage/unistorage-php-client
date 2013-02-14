@@ -98,7 +98,19 @@ class UploadTest extends PHPUnit_Framework_TestCase
 		/** @var $audioFile AudioFile */
 		$audioFile = $this->unistorage->uploadFile(FIXTURES_DIR.'/AudioFile.m4r');
 		$this->assertInstanceOf('Unistorage\Models\Files\AudioFile', $audioFile);
-	}
+
+        $this->assertNotEmpty($audioFile->bitrate);
+        $this->assertNotEmpty($audioFile->duration);
+        $this->assertEquals($audioFile->channels, 2);
+        $this->assertEquals($audioFile->sampleRate, 44100);
+        $this->assertEquals($audioFile->format, 'mov');
+        $this->assertEquals($audioFile->codec, 'aac');
+        $this->assertNotEmpty($audioFile->url);
+        $this->assertEquals($audioFile->name, 'AudioFile.m4r');
+        $this->assertEquals($audioFile->size, 966234);
+        $this->assertEquals($audioFile->mimeType, 'audio/mp4');
+        $this->assertEquals($audioFile->unistorageType, 'audio');
+    }
 
 	public function testVideo()
 	{
@@ -113,20 +125,24 @@ class UploadTest extends PHPUnit_Framework_TestCase
 				$resultFile instanceof PendingFile,
 			'Failed asserting type of resultFile after extractAudio');
 
+        $this->assertEquals($videoFile->size, 1516948);
+        $this->assertEquals($videoFile->name, 'VideoFile.mov');
+        $this->assertEquals($videoFile->mimeType, 'video/quicktime');
+        $this->assertEquals($videoFile->format, 'mov');
+        $this->assertEquals($videoFile->unistorageType, 'video');
+        $this->assertNotEmpty($videoFile->url);
+        $this->assertEquals($videoFile->videoWidth, 1280);
 		$this->assertNotEmpty($videoFile->audioBitrate);
-		$this->assertNotEmpty($videoFile->audioCodec);
+		$this->assertEquals($videoFile->audioCodec, 'aac');
 		$this->assertNotEmpty($videoFile->audioDuration);
 		$this->assertNotEmpty($videoFile->audioSampleRate);
+		$this->assertEquals($videoFile->audioChannels, 1);
 		$this->assertNotEmpty($videoFile->videoBitrate);
-		$this->assertNotEmpty($videoFile->videoCodec);
+		$this->assertEquals($videoFile->videoCodec, 'h264');
 		$this->assertNotEmpty($videoFile->videoDuration);
-		$this->assertNotEmpty($videoFile->videoFps);
-		$this->assertNotEmpty($videoFile->videoHeight);
-		$this->assertNotEmpty($videoFile->videoWidth);
-		$this->assertNotEmpty($videoFile->mimeType);
-		$this->assertNotEmpty($videoFile->size);
-		$this->assertNotEmpty($videoFile->url);
-		$this->assertNotEmpty($videoFile->url);
+		$this->assertEquals($videoFile->videoFps, 24);
+		$this->assertEquals($videoFile->videoHeight, 720);
+		$this->assertEquals($videoFile->videoWidth, 1280);
 
 		$resultFile = $videoFile->captureFrame('jpeg', 0, $this->unistorage);
 		$this->assertTrue(

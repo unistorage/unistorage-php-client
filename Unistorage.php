@@ -125,7 +125,7 @@ class Unistorage
 		unset($answerData['mimetype']);
 
 		$answerData['unistorageType'] = $answerData['unistorage_type'];
-		unset($answerData['unistorageType']);
+		unset($answerData['unistorage_type']);
 
 		foreach ($answerData['extra'] as $id => $value) {
 			if (is_array($value)) {
