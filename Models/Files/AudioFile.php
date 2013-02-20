@@ -12,43 +12,43 @@ use Unistorage\Unistorage;
  */
 class AudioFile extends RegularFile
 {
-	/**
-	 * @var string
-	 */
-	protected $codec;
+    /**
+     * @var string
+     */
+    protected $codec;
 
-	/**
-	 * @var string
-	 */
-	protected $format;
+    /**
+     * @var string
+     */
+    protected $format;
 
-	/**
-	 * @var int
-	 */
-	protected $channels;
+    /**
+     * @var int
+     */
+    protected $channels;
 
-	/**
-	 * @var int in Hz
-	 */
-	protected $sampleRate;
+    /**
+     * @var int in Hz
+     */
+    protected $sampleRate;
 
-	/**
-	 * @var float in seconds
-	 */
-	protected $duration;
+    /**
+     * @var float in seconds
+     */
+    protected $duration;
 
-	/**
-	 * @var int in bytes
-	 */
-	protected $bitrate;
+    /**
+     * @var int in bytes
+     */
+    protected $bitrate;
 
     /**
      * @return string
      */
     public function getCodec()
-	{
-		return $this->codec;
-	}
+    {
+        return $this->codec;
+    }
 
     /**
      * @return int
@@ -91,14 +91,18 @@ class AudioFile extends RegularFile
     }
 
     /**
-	 * @param string $format
-	 * @param Unistorage $unistorage
-	 * @return File
-	 */
-	public function convert($format, $unistorage)
-	{
-		return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
-			'to' => $format,
-		));
-	}
+     * @param string $format
+     * @param Unistorage $unistorage
+     * @return File
+     */
+    public function convert($format, $unistorage)
+    {
+        return $unistorage->applyAction(
+            $this,
+            RegularFile::ACTION_CONVERT,
+            array(
+                'to' => $format,
+            )
+        );
+    }
 }

@@ -8,33 +8,33 @@ use Unistorage\Models\Component;
  */
 abstract class File extends Component
 {
-	/**
-	 * @var int
-	 */
-	protected $ttl;
+    /**
+     * @var int
+     */
+    protected $ttl;
 
-	/**
-	 * @var string
-	 */
-	protected $resourceUri;
+    /**
+     * @var string
+     */
+    protected $resourceUri;
 
-	/**
-	 * @param string $resourceUri
-	 * @param int $ttl
-	 */
-	function __construct($resourceUri, $ttl)
-	{
-		$this->resourceUri = $resourceUri;
-		$this->ttl = $ttl;
-	}
+    /**
+     * @param string $resourceUri
+     * @param int $ttl
+     */
+    function __construct($resourceUri, $ttl)
+    {
+        $this->resourceUri = $resourceUri;
+        $this->ttl = $ttl;
+    }
 
-	public function getResourceUri()
-	{
-		return $this->resourceUri;
-	}
+    public function getResourceUri()
+    {
+        return $this->resourceUri;
+    }
 
-	public function getTtl()
-	{
-		return $this->ttl;
-	}
+    public function getTtl()
+    {
+        return $this->ttl;
+    }
 }

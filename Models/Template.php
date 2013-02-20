@@ -5,21 +5,21 @@
  */
 class Template extends Component
 {
-	/**
-	 * @var string
-	 */
-	private $resourceUri;
+    /**
+     * @var string
+     */
+    private $resourceUri;
 
-	/**
-	 * @param string $resourceUri
-	 */
-	function __construct($resourceUri)
-	{
-		$this->resourceUri = $resourceUri;
-	}
+    /**
+     * @param string $resourceUri
+     */
+    function __construct($resourceUri)
+    {
+        $this->resourceUri = $resourceUri;
+    }
 
-	public function getResourceUri()
-	{
-		return $this->resourceUri;
-	}
+    public function getResourceUri()
+    {
+        return $this->resourceUri;
+    }
 }

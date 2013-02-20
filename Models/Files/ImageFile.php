@@ -49,10 +49,12 @@ class ImageFile extends RegularFile
         $actionParams = array(
             'mode' => $mode,
         );
-        if (!empty($width))
+        if (!empty($width)) {
             $actionParams['w'] = $width;
-        if (!empty($height))
+        }
+        if (!empty($height)) {
             $actionParams['h'] = $height;
+        }
 
         return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, $actionParams);
     }
@@ -64,9 +66,13 @@ class ImageFile extends RegularFile
      */
     public function convert($format, $unistorage)
     {
-        return $unistorage->applyAction($this, RegularFile::ACTION_CONVERT, array(
-            'to' => $format,
-        ));
+        return $unistorage->applyAction(
+            $this,
+            RegularFile::ACTION_CONVERT,
+            array(
+                'to' => $format,
+            )
+        );
     }
 
     /**
@@ -85,9 +91,13 @@ class ImageFile extends RegularFile
      */
     public function rotate($angle, $unistorage)
     {
-        return $unistorage->applyAction($this, RegularFile::ACTION_ROTATE, array(
-            'angle' => $angle,
-        ));
+        return $unistorage->applyAction(
+            $this,
+            RegularFile::ACTION_ROTATE,
+            array(
+                'angle' => $angle,
+            )
+        );
     }
 
     /**
@@ -105,15 +115,26 @@ class ImageFile extends RegularFile
      * @param Unistorage $unistorage
      * @return File
      */
-    public function watermark($watermark, $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding, $corner, $unistorage)
-    {
-        return $unistorage->applyAction($this, RegularFile::ACTION_WATERMARK, array(
-            'watermark' => $watermark->resourceUri,
-            'w' => $wmWidth,
-            'h' => $wmHeight,
-            'w_pad' => $horizontalPadding,
-            'h_pad' => $verticalPadding,
-            'corner' => $corner,
-        ));
+    public function watermark(
+        $watermark,
+        $wmWidth,
+        $wmHeight,
+        $horizontalPadding,
+        $verticalPadding,
+        $corner,
+        $unistorage
+    ) {
+        return $unistorage->applyAction(
+            $this,
+            RegularFile::ACTION_WATERMARK,
+            array(
+                'watermark' => $watermark->resourceUri,
+                'w' => $wmWidth,
+                'h' => $wmHeight,
+                'w_pad' => $horizontalPadding,
+                'h_pad' => $verticalPadding,
+                'corner' => $corner,
+            )
+        );
     }
 }

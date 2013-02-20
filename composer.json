@@ -1,0 +1,14 @@
+{
+    "name": "66ru/unistorage-php-client",
+    "description": "Client for unistorage",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "m8rge",
+            "email": "to.merge@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "3.7.14"
+    }
+}
