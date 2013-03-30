@@ -6,8 +6,8 @@ use Unistorage\Models\Files\RegularFile;
 use Unistorage\Models\Files\TemporaryFile;
 use Unistorage\Models\Files\ZipFile;
 use Unistorage\Models\Template;
-
-require_once(__DIR__ . '/autoload.php');
+use m8rge\CurlHelper;
+use m8rge\CurlException;
 
 class Unistorage
 {
@@ -30,7 +30,7 @@ class Unistorage
      * @param string $endPoint
      * @param array $fields
      * @param string $method post or get
-     * @throws USException
+     * @throws USException|CurlException
      * @return array unistorage response in array format
      */
     private function sendRequest($endPoint, $fields = array(), $method = 'get')
@@ -40,27 +40,35 @@ class Unistorage
                 'Token: ' . $this->token,
             ),
         );
-        if ($method == 'get') {
-            $returnedData = \CurlHelper::getUrl(
-                $this->host . $endPoint . (!empty($fields) ? '?' . http_build_query($fields) : ''),
-                $tokenHeader
-            );
-        } else {
-            $returnedData = \CurlHelper::postUrl($this->host . $endPoint, $fields, $tokenHeader);
+        $e = null;
+        try {
+            if ($method == 'get') {
+                $returnedData = CurlHelper::getUrl(
+                    'http://' . $this->host . $endPoint . (!empty($fields) ? '?' . http_build_query($fields) : ''),
+                    $tokenHeader
+                );
+            } else {
+                $returnedData = CurlHelper::postUrl('http://' . $this->host . $endPoint, $fields, $tokenHeader);
+            }
+        } catch (CurlException $e) {
+            $returnedData = $e->getData();
+            if (empty($returnedData)) {
+                throw $e;
+            }
         }
         $answer = json_decode($returnedData, true);
         if (is_null($answer)) {
-            throw new USException('answer from unistorage can\'t be decoded: ' . $returnedData);
+            throw new USException('answer from unistorage can\'t be decoded: ' . $returnedData,  0, $e);
         }
 
         if (empty($answer['status'])) {
-            throw new USException('answer from unistorage have missing status field: ' . $returnedData);
+            throw new USException('answer from unistorage have missing status field: ' . $returnedData,  0, $e);
         }
         if ($answer['status'] == self::STATUS_ERROR) {
             if (empty($answer['msg'])) {
-                throw new USException('answer from unistorage have missing msg field: ' . $returnedData);
+                throw new USException('answer from unistorage have missing msg field: ' . $returnedData,  0, $e);
             }
-            throw new USException('unistorage error: ' . $answer['msg']);
+            throw new USException('unistorage error: ' . $answer['msg'], 0, $e);
         }
 
         return $answer;

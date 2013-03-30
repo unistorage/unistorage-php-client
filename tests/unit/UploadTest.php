@@ -59,6 +59,8 @@ class UploadTest extends PHPUnit_Framework_TestCase
                 $resultFile instanceof TemporaryFile ||
                 $resultFile instanceof PendingFile,
             'Failed asserting type of resultFile after watermark');
+        $this->setExpectedException('\Unistorage\USException');
+        $imageFile->watermark($imageFile, 1000, 1000, 10, 10, ImageFile::CORNER_RIGHT_BOTTOM, $this->unistorage);
     }
 
     public function testTemplate()
