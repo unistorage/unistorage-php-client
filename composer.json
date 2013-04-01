@@ -1,6 +1,7 @@
 {
     "name": "66ru/unistorage-php-client",
     "description": "Client for unistorage",
+    "license": "MIT",
     "authors": [
         {
             "name": "m8rge",
