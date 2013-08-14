@@ -58,15 +58,15 @@ class Unistorage
         }
         $answer = json_decode($returnedData, true);
         if (is_null($answer)) {
-            throw new USException('answer from unistorage can\'t be decoded: ' . $returnedData,  0, $e);
+            throw new USException('answer from unistorage can\'t be decoded: ' . $returnedData, 0, $e);
         }
 
         if (empty($answer['status'])) {
-            throw new USException('answer from unistorage have missing status field: ' . $returnedData,  0, $e);
+            throw new USException('answer from unistorage have missing status field: ' . $returnedData, 0, $e);
         }
         if ($answer['status'] == self::STATUS_ERROR) {
             if (empty($answer['msg'])) {
-                throw new USException('answer from unistorage have missing msg field: ' . $returnedData,  0, $e);
+                throw new USException('answer from unistorage have missing msg field: ' . $returnedData, 0, $e);
             }
             throw new USException('unistorage error: ' . $answer['msg'], 0, $e);
         }
@@ -86,7 +86,16 @@ class Unistorage
             $filename = pathinfo($filePath, PATHINFO_BASENAME);
         }
 
-        $fields = array('file' => "@$filePath;filename=$filename");
+        if (class_exists('CurlFile')) {
+            // PHP >= 5.5
+            $file = new \CurlFile($filePath);
+            $file->setPostFilename($filename);
+        } else {
+            // PHP < 5.5
+            $file = "@$filePath;filename=$filename";
+        }
+        $fields = array('file' => $file);
+
         if (!is_null($typeId)) {
             $fields += array('type_id' => $typeId);
         }
