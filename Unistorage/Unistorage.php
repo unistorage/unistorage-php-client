@@ -86,7 +86,7 @@ class Unistorage
             $filename = pathinfo($filePath, PATHINFO_BASENAME);
         }
 
-        if (class_exists('CurlFile')) {
+        if (class_exists('\CurlFile', false)) {
             // PHP >= 5.5
             $file = new \CurlFile($filePath);
             $file->setPostFilename($filename);
