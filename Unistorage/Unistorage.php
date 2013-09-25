@@ -39,6 +39,7 @@ class Unistorage
             CURLOPT_HTTPHEADER => array(
                 'Token: ' . $this->token,
             ),
+            CURLOPT_TIMEOUT => 60*60*2,
         );
         $e = null;
         try {
