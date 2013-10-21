@@ -138,7 +138,13 @@ class Unistorage
             $className = $this->getFilesNamespace() . $className;
             $properties = $this->convertToFieldNames($answer['data']);
 
-            return new $className($properties, $resourceUri, $answer['ttl']);
+            if (!isset($answer['ttl'])) {
+                $ttl = null;
+            } else {
+                $ttl = $answer['ttl'];
+            }
+
+            return new $className($properties, $resourceUri, $ttl);
         }
     }
 

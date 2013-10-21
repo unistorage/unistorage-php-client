@@ -11,6 +11,7 @@ use Unistorage\Unistorage;
  * @property-read int $size
  * @property-read string $url
  * @property-read string $unistorageType
+ * @property-read int|null $ttl
  */
 class RegularFile extends File
 {
