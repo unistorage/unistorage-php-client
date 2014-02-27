@@ -44,8 +44,6 @@ class Unistorage
             CURLOPT_TIMEOUT    => 60 * 60 * 2,
         );
         $e = null;
-        var_dump('http://' . $this->host . $endPoint . (!empty($fields) ? '?' . http_build_query($fields) : ''));
-        die;
         try {
             if ($method == 'get') {
                 $returnedData = CurlHelper::getUrl(
