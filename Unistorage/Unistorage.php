@@ -27,21 +27,25 @@ class Unistorage
     public $token;
 
     /**
-     * @param string $endPoint
-     * @param array $fields
-     * @param string $method post or get
+     * @param  string $endPoint
+     * @param  array  $fields
+     * @param  string $method post or get
+     *
      * @throws USException|CurlException
-     * @return array unistorage response in array format
+     * @return array                     unistorage response in array format
      */
     private function sendRequest($endPoint, $fields = array(), $method = 'get')
     {
+
         $tokenHeader = array(
             CURLOPT_HTTPHEADER => array(
                 'Token: ' . $this->token,
             ),
-            CURLOPT_TIMEOUT => 60*60*2,
+            CURLOPT_TIMEOUT    => 60 * 60 * 2,
         );
         $e = null;
+        var_dump('http://' . $this->host . $endPoint . (!empty($fields) ? '?' . http_build_query($fields) : ''));
+        die;
         try {
             if ($method == 'get') {
                 $returnedData = CurlHelper::getUrl(
@@ -53,6 +57,7 @@ class Unistorage
             }
         } catch (CurlException $e) {
             $returnedData = $e->getData();
+            var_dump($returnedData);
             if (empty($returnedData)) {
                 throw $e;
             }
@@ -76,9 +81,10 @@ class Unistorage
     }
 
     /**
-     * @param string $filePath
-     * @param string $filename
-     * @param null|string $typeId used for internal unistorage statistics
+     * @param  string      $filePath
+     * @param  string      $filename
+     * @param  null|string $typeId used for internal unistorage statistics
+     *
      * @return File
      */
     public function uploadFile($filePath, $filename = '', $typeId = null)
@@ -111,7 +117,8 @@ class Unistorage
     }
 
     /**
-     * @param string $resourceUri
+     * @param  string $resourceUri
+     *
      * @throws USException
      * @return File
      */
@@ -126,10 +133,10 @@ class Unistorage
             return new TemporaryFile($answer['data']['url'], $resourceUri, $answer['ttl']);
         } else {
             static $unistorageTypeToClassName = array(
-                'image' => 'ImageFile',
-                'video' => 'VideoFile',
-                'audio' => 'AudioFile',
-                'doc' => 'DocFile',
+                'image'   => 'ImageFile',
+                'video'   => 'VideoFile',
+                'audio'   => 'AudioFile',
+                'doc'     => 'DocFile',
                 'unknown' => 'RegularFile',
             );
 
@@ -149,7 +156,8 @@ class Unistorage
     }
 
     /**
-     * @param array $answerData
+     * @param  array $answerData
+     *
      * @return array
      */
     private function convertToFieldNames($answerData)
@@ -176,7 +184,9 @@ class Unistorage
 
     /**
      * convert sample_name to sampleName (underscore style to camelCase style)
-     * @param string $name
+     *
+     * @param  string $name
+     *
      * @return string
      */
     private function normalizeFieldName($name)
@@ -191,8 +201,9 @@ class Unistorage
     }
 
     /**
-     * @param array $actions array( actionName => array with action params)
-     * @param string $applicableFor file unistorageType. One of RegularFile::FILE_TYPE_*
+     * @param  array  $actions       array( actionName => array with action params)
+     * @param  string $applicableFor file unistorageType. One of RegularFile::FILE_TYPE_*
+     *
      * @throws USException
      * @return Template
      */
@@ -213,9 +224,10 @@ class Unistorage
     }
 
     /**
-     * @param RegularFile $file
-     * @param string $actionName
-     * @param array $actionParams
+     * @param  RegularFile $file
+     * @param  string      $actionName
+     * @param  array       $actionParams
+     *
      * @throws USException
      * @return File
      */
@@ -223,8 +235,26 @@ class Unistorage
     {
         $answer = $this->sendRequest(
             $file->resourceUri,
+                array(
+                    'action' => $actionName,
+                ) + $actionParams
+        );
+        return $this->getFile($answer['resource_uri']);
+    }
+
+    /**
+     * @param  RegularFile $file
+     * @param  Template    $template
+     *
+     * @throws USException
+     * @return File
+     */
+    public function applyTemplate($file, $template, $actionParams = array())
+    {
+        $answer = $this->sendRequest(
+            $file->resourceUri,
             array(
-                'action' => $actionName,
+                'template' => $template->resourceUri,
             ) + $actionParams
         );
 
@@ -232,26 +262,9 @@ class Unistorage
     }
 
     /**
-     * @param RegularFile $file
-     * @param Template $template
-     * @throws USException
-     * @return File
-     */
-    public function applyTemplate($file, $template)
-    {
-        $answer = $this->sendRequest(
-            $file->resourceUri,
-            array(
-                'template' => $template->resourceUri,
-            )
-        );
-
-        return $this->getFile($answer['resource_uri']);
-    }
-
-    /**
-     * @param RegularFile[] $files
-     * @param string $zipFileName
+     * @param  RegularFile[] $files
+     * @param  string        $zipFileName
+     *
      * @throws USException
      * @return ZipFile
      */

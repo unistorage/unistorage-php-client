@@ -13,7 +13,7 @@ class Template extends Component
     /**
      * @param string $resourceUri
      */
-    function __construct($resourceUri)
+    public function __construct($resourceUri)
     {
         $this->resourceUri = $resourceUri;
     }

@@ -4,17 +4,17 @@ use Unistorage\Unistorage;
 
 /**
  * @property-read string $format
- * @property-read int $videoWidth
- * @property-read int $videoHeight
+ * @property-read int    $videoWidth
+ * @property-read int    $videoHeight
  * @property-read string $videoCodec
- * @property-read float $videoDuration
- * @property-read int $videoBitrate
- * @property-read int $videoFps
- * @property-read int $audioSampleRate
+ * @property-read float  $videoDuration
+ * @property-read int    $videoBitrate
+ * @property-read int    $videoFps
+ * @property-read int    $audioSampleRate
  * @property-read string $audioCodec
- * @property-read int $audioBitrate
- * @property-read float $audioDuration
- * @property-read int $audioChannels
+ * @property-read int    $audioBitrate
+ * @property-read float  $audioDuration
+ * @property-read int    $audioChannels
  */
 class VideoFile extends RegularFile
 {
@@ -79,10 +79,11 @@ class VideoFile extends RegularFile
     protected $format;
 
     /**
-     * @param string $format
-     * @param string $vCodec
-     * @param string $aCodec
-     * @param Unistorage $unistorage
+     * @param  string     $format
+     * @param  string     $vCodec
+     * @param  string     $aCodec
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
     public function convert($format, $vCodec, $aCodec, $unistorage)
@@ -91,7 +92,7 @@ class VideoFile extends RegularFile
             $this,
             RegularFile::ACTION_CONVERT,
             array(
-                'to' => $format,
+                'to'     => $format,
                 'vcodec' => $vCodec,
                 'acodec' => $aCodec,
             )
@@ -99,8 +100,9 @@ class VideoFile extends RegularFile
     }
 
     /**
-     * @param string $format
-     * @param Unistorage $unistorage
+     * @param  string     $format
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
     public function extractAudio($format, $unistorage)
@@ -120,13 +122,15 @@ class VideoFile extends RegularFile
      * <li> (\d+)px - number calculates in pixels
      * <li> (\d+) - number calculates in percents
      * </ul>
-     * @param ImageFile $watermark
-     * @param string $wmWidth watermark width
-     * @param string $wmHeight watermark height
-     * @param string $horizontalPadding padding of watermark
-     * @param string $verticalPadding padding of watermark
-     * @param string $corner one of ImageFile::CORNER_*
-     * @param Unistorage $unistorage
+     *
+     * @param  ImageFile  $watermark
+     * @param  string     $wmWidth           watermark width
+     * @param  string     $wmHeight          watermark height
+     * @param  string     $horizontalPadding padding of watermark
+     * @param  string     $verticalPadding   padding of watermark
+     * @param  string     $corner            one of ImageFile::CORNER_*
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
     public function watermark(
@@ -143,19 +147,20 @@ class VideoFile extends RegularFile
             RegularFile::ACTION_WATERMARK,
             array(
                 'watermark' => $watermark->resourceUri,
-                'w' => $wmWidth,
-                'h' => $wmHeight,
-                'w_pad' => $horizontalPadding,
-                'h_pad' => $verticalPadding,
-                'corner' => $corner,
+                'w'         => $wmWidth,
+                'h'         => $wmHeight,
+                'w_pad'     => $horizontalPadding,
+                'h_pad'     => $verticalPadding,
+                'corner'    => $corner,
             )
         );
     }
 
     /**
-     * @param string $format
-     * @param integer $position
-     * @param Unistorage $unistorage
+     * @param  string     $format
+     * @param  integer    $position
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
     public function captureFrame($format, $position, $unistorage)
@@ -164,7 +169,7 @@ class VideoFile extends RegularFile
             $this,
             'capture_frame',
             array(
-                'to' => $format,
+                'to'       => $format,
                 'position' => $position,
             )
         );
