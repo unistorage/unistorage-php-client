@@ -55,7 +55,6 @@ class Unistorage
             }
         } catch (CurlException $e) {
             $returnedData = $e->getData();
-            var_dump($returnedData);
             if (empty($returnedData)) {
                 throw $e;
             }
