@@ -1,6 +1,6 @@
 <?php
 
 return array(
-	'host' => '',
-	'token' => '',
+    'host'  => '',
+    'token' => '',
 );

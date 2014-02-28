@@ -17,9 +17,9 @@ class TemporaryFile extends File
     /**
      * @param string $url
      * @param string $resourceUri
-     * @param int $ttl
+     * @param int    $ttl
      */
-    function __construct($url, $resourceUri, $ttl)
+    public function __construct($url, $resourceUri, $ttl)
     {
         parent::__construct($resourceUri, $ttl);
 

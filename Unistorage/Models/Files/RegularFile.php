@@ -6,11 +6,11 @@ use Unistorage\Unistorage;
 /**
  * Common file
  *
- * @property-read string $mimeType
- * @property-read string $name
- * @property-read int $size
- * @property-read string $url
- * @property-read string $unistorageType
+ * @property-read string   $mimeType
+ * @property-read string   $name
+ * @property-read int      $size
+ * @property-read string   $url
+ * @property-read string   $unistorageType
  * @property-read int|null $ttl
  */
 class RegularFile extends File
@@ -21,6 +21,7 @@ class RegularFile extends File
     const FILE_TYPE_DOC = 'doc';
 
     const ACTION_RESIZE = 'resize';
+    const ACTION_CROP = 'crop';
     const ACTION_CONVERT = 'convert';
     const ACTION_GRAYSCALE = 'grayscale';
     const ACTION_ROTATE = 'rotate';
@@ -53,11 +54,11 @@ class RegularFile extends File
     protected $unistorageType;
 
     /**
-     * @param array $properties
+     * @param array  $properties
      * @param string $resourceUri
-     * @param int $ttl
+     * @param int    $ttl
      */
-    function __construct($properties, $resourceUri, $ttl)
+    public function __construct($properties, $resourceUri, $ttl)
     {
         parent::__construct($resourceUri, $ttl);
 
@@ -67,13 +68,14 @@ class RegularFile extends File
     }
 
     /**
-     * @param Template $template
-     * @param Unistorage $unistorage
+     * @param  Template   $template
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
-    public function apply($template, $unistorage)
+    public function apply($template, $unistorage, $params=array())
     {
-        return $unistorage->applyTemplate($this, $template);
+        return $unistorage->applyTemplate($this, $template, $params);
     }
 
     public function getMimeType()

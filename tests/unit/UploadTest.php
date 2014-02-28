@@ -32,47 +32,63 @@ class UploadTest extends PHPUnit_Framework_TestCase
         $resultFile = $imageFile->convert('png', $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after convert');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after convert'
+        );
         $resultFile = $imageFile->grayscale($this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after grayscale');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after grayscale'
+        );
         $resultFile = $imageFile->resize(ImageFile::MODE_CROP_RESIZE, 50, 50, $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after resize');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after resize'
+        );
         $resultFile = $imageFile->rotate(90, $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after rotate');
-        $resultFile = $imageFile->watermark($imageFile, 20, 20, 20, 20, ImageFile::CORNER_RIGHT_BOTTOM, $this->unistorage);
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after rotate'
+        );
+        $resultFile = $imageFile->watermark(
+            $imageFile,
+            20,
+            20,
+            20,
+            20,
+            ImageFile::CORNER_RIGHT_BOTTOM,
+            $this->unistorage
+        );
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after watermark');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after watermark'
+        );
         $this->setExpectedException('\Unistorage\USException');
         $imageFile->watermark($imageFile, 1000, 1000, 10, 10, ImageFile::CORNER_RIGHT_BOTTOM, $this->unistorage);
     }
 
     public function testTemplate()
     {
-        $template = $this->unistorage->createTemplate(array(
-            RegularFile::ACTION_RESIZE => array(
-                'mode' => ImageFile::MODE_KEEP_RATIO,
-                'w' => 50,
-                'h' => 50,
+        $template = $this->unistorage->createTemplate(
+            array(
+                RegularFile::ACTION_RESIZE => array(
+                    'mode' => ImageFile::MODE_KEEP_RATIO,
+                    'w'    => 50,
+                    'h'    => 50,
+                ),
+                RegularFile::ACTION_GRAYSCALE => array(),
             ),
-            RegularFile::ACTION_GRAYSCALE => array(),
-        ), RegularFile::FILE_TYPE_IMAGE);
+            RegularFile::FILE_TYPE_IMAGE
+        );
         $this->assertInstanceOf('Unistorage\Models\Template', $template);
 
         /** @var $imageFile ImageFile */
@@ -82,9 +98,10 @@ class UploadTest extends PHPUnit_Framework_TestCase
         $resultFile = $imageFile->apply($template, $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after apply template');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after apply template'
+        );
     }
 
     public function testCreateZip()
@@ -123,9 +140,10 @@ class UploadTest extends PHPUnit_Framework_TestCase
         $resultFile = $videoFile->extractAudio('mp3', $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof AudioFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after extractAudio');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after extractAudio'
+        );
 
         $this->assertEquals($videoFile->size, 1516948);
         $this->assertEquals($videoFile->name, 'VideoFile.mov');
@@ -149,8 +167,9 @@ class UploadTest extends PHPUnit_Framework_TestCase
         $resultFile = $videoFile->captureFrame('jpeg', 0, $this->unistorage);
         $this->assertTrue(
             $resultFile instanceof ImageFile ||
-                $resultFile instanceof TemporaryFile ||
-                $resultFile instanceof PendingFile,
-            'Failed asserting type of resultFile after captureFrame');
+            $resultFile instanceof TemporaryFile ||
+            $resultFile instanceof PendingFile,
+            'Failed asserting type of resultFile after captureFrame'
+        );
     }
 }

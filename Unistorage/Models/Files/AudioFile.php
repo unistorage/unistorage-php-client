@@ -91,8 +91,9 @@ class AudioFile extends RegularFile
     }
 
     /**
-     * @param string $format
-     * @param Unistorage $unistorage
+     * @param  string     $format
+     * @param  Unistorage $unistorage
+     *
      * @return File
      */
     public function convert($format, $unistorage)

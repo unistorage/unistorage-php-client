@@ -3,7 +3,7 @@
 use Unistorage\Models\Component;
 
 /**
- * @property-read int $ttl
+ * @property-read int    $ttl
  * @property-read string $resourceUri
  */
 abstract class File extends Component
@@ -20,9 +20,9 @@ abstract class File extends Component
 
     /**
      * @param string $resourceUri
-     * @param int $ttl
+     * @param int    $ttl
      */
-    function __construct($resourceUri, $ttl)
+    public function __construct($resourceUri, $ttl)
     {
         $this->resourceUri = $resourceUri;
         $this->ttl = $ttl;
