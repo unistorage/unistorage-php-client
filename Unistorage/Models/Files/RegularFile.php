@@ -53,13 +53,13 @@ class RegularFile extends File
     protected $unistorageType;
 
     /**
-     * @param  Template $template
-     * @param  Unistorage $unistorage
+     * @param Template $template
      * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function apply($template, $unistorage, $lowPriority = false)
+    public function apply($template, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyTemplate($this, $template, $lowPriority);
     }
