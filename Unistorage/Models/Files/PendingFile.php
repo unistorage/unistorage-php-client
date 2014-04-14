@@ -3,7 +3,7 @@
 /**
  * File is not ready
  */
-class PendingFile extends File
+class PendingFile extends NonPermanentFile
 {
 
 }

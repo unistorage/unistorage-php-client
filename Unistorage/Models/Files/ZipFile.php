@@ -3,24 +3,12 @@
 /**
  * @property-read string $uri
  */
-class ZipFile extends File
+class ZipFile extends NonPermanentFile
 {
     /**
      * @var string
      */
     protected $url;
-
-    /**
-     * @param string $url
-     * @param string $resourceUri
-     * @param int    $ttl
-     */
-    public function __construct($url, $resourceUri, $ttl)
-    {
-        parent::__construct($resourceUri, $ttl);
-
-        $this->url = $url;
-    }
 
     public function getUri()
     {

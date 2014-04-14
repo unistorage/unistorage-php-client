@@ -79,14 +79,15 @@ class VideoFile extends RegularFile
     protected $format;
 
     /**
-     * @param  string     $format
-     * @param  string     $vCodec
-     * @param  string     $aCodec
-     * @param  Unistorage $unistorage
+     * @param string $format
+     * @param string $vCodec
+     * @param string $aCodec
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function convert($format, $vCodec, $aCodec, $unistorage)
+    public function convert($format, $vCodec, $aCodec, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyAction(
             $this,
@@ -95,41 +96,45 @@ class VideoFile extends RegularFile
                 'to'     => $format,
                 'vcodec' => $vCodec,
                 'acodec' => $aCodec,
-            )
+            ),
+            $lowPriority
         );
     }
 
     /**
-     * @param  string     $format
-     * @param  Unistorage $unistorage
+     * @param string $format
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function extractAudio($format, $unistorage)
+    public function extractAudio($format, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyAction(
             $this,
             RegularFile::ACTION_EXTRACT_AUDIO,
             array(
                 'to' => $format,
-            )
+            ),
+            $lowPriority
         );
     }
 
     /**
-     * $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding my have following format:
+     * $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding may have following format:
      * <ul>
      * <li> (\d+)px - number calculates in pixels
      * <li> (\d+) - number calculates in percents
      * </ul>
      *
-     * @param  ImageFile  $watermark
-     * @param  string     $wmWidth           watermark width
-     * @param  string     $wmHeight          watermark height
-     * @param  string     $horizontalPadding padding of watermark
-     * @param  string     $verticalPadding   padding of watermark
-     * @param  string     $corner            one of ImageFile::CORNER_*
-     * @param  Unistorage $unistorage
+     * @param ImageFile $watermark
+     * @param string $wmWidth watermark width
+     * @param string $wmHeight watermark height
+     * @param string $horizontalPadding padding of watermark
+     * @param string $verticalPadding padding of watermark
+     * @param string $corner one of ImageFile::CORNER_*
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
@@ -140,6 +145,7 @@ class VideoFile extends RegularFile
         $horizontalPadding,
         $verticalPadding,
         $corner,
+        $lowPriority = false,
         $unistorage
     ) {
         return $unistorage->applyAction(
@@ -152,18 +158,20 @@ class VideoFile extends RegularFile
                 'w_pad'     => $horizontalPadding,
                 'h_pad'     => $verticalPadding,
                 'corner'    => $corner,
-            )
+            ),
+            $lowPriority
         );
     }
 
     /**
-     * @param  string     $format
-     * @param  integer    $position
-     * @param  Unistorage $unistorage
+     * @param string $format
+     * @param integer $position
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function captureFrame($format, $position, $unistorage)
+    public function captureFrame($format, $position, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyAction(
             $this,
@@ -171,7 +179,8 @@ class VideoFile extends RegularFile
             array(
                 'to'       => $format,
                 'position' => $position,
-            )
+            ),
+            $lowPriority
         );
     }
 

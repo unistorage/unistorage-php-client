@@ -3,16 +3,10 @@
 use Unistorage\Models\Component;
 
 /**
- * @property-read int    $ttl
  * @property-read string $resourceUri
  */
 abstract class File extends Component
 {
-    /**
-     * @var int
-     */
-    protected $ttl;
-
     /**
      * @var string
      */
@@ -20,21 +14,22 @@ abstract class File extends Component
 
     /**
      * @param string $resourceUri
-     * @param int    $ttl
+     * @param array $config
      */
-    public function __construct($resourceUri, $ttl)
+    public function __construct($resourceUri, $config = array())
     {
         $this->resourceUri = $resourceUri;
-        $this->ttl = $ttl;
+
+        foreach ($config as $property => $value) {
+            $this->$property = $value;
+        }
     }
 
+    /**
+     * @return string
+     */
     public function getResourceUri()
     {
         return $this->resourceUri;
-    }
-
-    public function getTtl()
-    {
-        return $this->ttl;
     }
 }

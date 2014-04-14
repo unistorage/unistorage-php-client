@@ -32,11 +32,10 @@ class Unistorage
      * @param  string $method post or get
      *
      * @throws USException|CurlException
-     * @return array                     unistorage response in array format
+     * @return array unistorage response in array format
      */
     private function sendRequest($endPoint, $fields = array(), $method = 'get')
     {
-
         $tokenHeader = array(
             CURLOPT_HTTPHEADER => array(
                 'Token: ' . $this->token,
@@ -123,37 +122,27 @@ class Unistorage
     {
         $answer = $this->sendRequest($resourceUri);
         if ($answer['status'] == self::STATUS_WAIT) {
-            return new PendingFile($resourceUri, $answer['ttl']);
+            return new PendingFile($resourceUri, ['ttl' => $answer['ttl']]);
         } elseif (strpos($resourceUri, '/zip/') === 0) {
-            return new ZipFile($answer['data']['url'], $resourceUri, $answer['ttl']);
+            return new ZipFile($resourceUri, ['ttl' => $answer['ttl'], 'url' => $answer['data']['url']]);
         } elseif ($answer['status'] == self::STATUS_JUST_URI) {
-            return new TemporaryFile($answer['data']['url'], $resourceUri, $answer['ttl']);
+            return new TemporaryFile($resourceUri, ['ttl' => $answer['ttl'], 'url' => $answer['data']['url']]);
         } else {
             static $unistorageTypeToClassName = array(
                 'image'   => 'ImageFile',
                 'video'   => 'VideoFile',
                 'audio'   => 'AudioFile',
                 'doc'     => 'DocFile',
-                'presentation' => 'RegularFile',
+                'presentation' => 'PresentationFile',
                 'unknown' => 'RegularFile',
             );
 
-            if(isset($unistorageTypeToClassName[$answer['data']['unistorage_type']])) {
-                $className = $unistorageTypeToClassName[$answer['data']['unistorage_type']];
-            } else {
-                $className = 'RegularFile';
-            }
+            $className = $unistorageTypeToClassName[$answer['data']['unistorage_type']];
 
             $className = $this->getFilesNamespace() . $className;
             $properties = $this->convertToFieldNames($answer['data']);
 
-            if (!isset($answer['ttl'])) {
-                $ttl = null;
-            } else {
-                $ttl = $answer['ttl'];
-            }
-
-            return new $className($properties, $resourceUri, $ttl);
+            return new $className($resourceUri, $properties);
         }
     }
 
@@ -204,7 +193,7 @@ class Unistorage
 
     /**
      * @param  array  $actions       array( actionName => array with action params)
-     * @param  string $applicableFor file unistorageType. One of RegularFile::FILE_TYPE_*
+     * @param  string $applicableFor One of RegularFile::FILE_TYPE_*
      *
      * @throws USException
      * @return Template
@@ -226,38 +215,50 @@ class Unistorage
     }
 
     /**
-     * @param  RegularFile $file
-     * @param  string      $actionName
-     * @param  array       $actionParams
+     * @param RegularFile $file
+     * @param string $actionName
+     * @param array $actionParams
+     * @param bool $lowPriority
      *
-     * @throws USException
      * @return File
      */
-    public function applyAction($file, $actionName, $actionParams = array())
+    public function applyAction($file, $actionName, $actionParams = array(), $lowPriority = false)
     {
+        $additionalParams = [];
+        if ($lowPriority) {
+            $additionalParams = [
+                'with_low_priority' => $lowPriority,
+            ];
+        }
         $answer = $this->sendRequest(
             $file->resourceUri,
                 array(
                     'action' => $actionName,
-                ) + $actionParams
+                ) + $actionParams + $additionalParams
         );
         return $this->getFile($answer['resource_uri']);
     }
 
     /**
-     * @param  RegularFile $file
-     * @param  Template    $template
+     * @param RegularFile $file
+     * @param Template $template
+     * @param bool $lowPriority
      *
-     * @throws USException
      * @return File
      */
-    public function applyTemplate($file, $template, $actionParams = array())
+    public function applyTemplate($file, $template, $lowPriority = false)
     {
+        $additionalParams = [];
+        if ($lowPriority) {
+            $additionalParams = [
+                'with_low_priority' => $lowPriority,
+            ];
+        }
         $answer = $this->sendRequest(
             $file->resourceUri,
             array(
                 'template' => $template->resourceUri,
-            ) + $actionParams
+            ) + $additionalParams
         );
 
         return $this->getFile($answer['resource_uri']);

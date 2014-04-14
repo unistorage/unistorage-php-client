@@ -11,7 +11,6 @@ use Unistorage\Unistorage;
  * @property-read int      $size
  * @property-read string   $url
  * @property-read string   $unistorageType
- * @property-read int|null $ttl
  */
 class RegularFile extends File
 {
@@ -54,28 +53,15 @@ class RegularFile extends File
     protected $unistorageType;
 
     /**
-     * @param array  $properties
-     * @param string $resourceUri
-     * @param int    $ttl
-     */
-    public function __construct($properties, $resourceUri, $ttl)
-    {
-        parent::__construct($resourceUri, $ttl);
-
-        foreach ($properties as $field => $value) {
-            $this->$field = $value;
-        }
-    }
-
-    /**
-     * @param  Template   $template
+     * @param  Template $template
      * @param  Unistorage $unistorage
+     * @param bool $lowPriority
      *
      * @return File
      */
-    public function apply($template, $unistorage, $params=array())
+    public function apply($template, $unistorage, $lowPriority = false)
     {
-        return $unistorage->applyTemplate($this, $template, $params);
+        return $unistorage->applyTemplate($this, $template, $lowPriority);
     }
 
     public function getMimeType()

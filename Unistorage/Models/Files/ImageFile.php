@@ -38,33 +38,35 @@ class ImageFile extends RegularFile
     }
 
     /**
-     * @param  string     $mode
-     * @param  int        $width
-     * @param  int        $height
-     * @param  Unistorage $unistorage
-     *
+     * @param int $x1
+     * @param int $y1
+     * @param int $width
+     * @param int $height
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      * @return File
      */
-    public function crop($x1, $y1, $width, $height, $unistorage)
+    public function crop($x1, $y1, $width, $height, $lowPriority = false, $unistorage)
     {
         $actionParams = array(
-            'x'=>$x1,
-            'y'=>$y1,
-            'w'=>$width,
-            'h'=>$height
+            'x' => $x1,
+            'y' => $y1,
+            'w' => $width,
+            'h' => $height
         );
-        return $unistorage->applyAction($this, RegularFile::ACTION_CROP, $actionParams);
+        return $unistorage->applyAction($this, RegularFile::ACTION_CROP, $actionParams, $lowPriority);
     }
 
     /**
-     * @param  string     $mode
-     * @param  int        $width
-     * @param  int        $height
-     * @param  Unistorage $unistorage
+     * @param string $mode
+     * @param int $width
+     * @param int $height
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function resize($mode, $width, $height, $unistorage)
+    public function resize($mode, $width, $height, $lowPriority = false, $unistorage)
     {
         $actionParams = array(
             'mode' => $mode,
@@ -75,67 +77,73 @@ class ImageFile extends RegularFile
         if (!empty($height)) {
             $actionParams['h'] = $height;
         }
-        return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, $actionParams);
+        return $unistorage->applyAction($this, RegularFile::ACTION_RESIZE, $actionParams, $lowPriority);
     }
 
     /**
-     * @param  string     $format
-     * @param  Unistorage $unistorage
+     * @param string $format
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function convert($format, $unistorage)
+    public function convert($format, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyAction(
             $this,
             RegularFile::ACTION_CONVERT,
             array(
                 'to' => $format,
-            )
+            ),
+            $lowPriority
         );
     }
 
     /**
-     * @param  Unistorage $unistorage
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function grayscale($unistorage)
+    public function grayscale($lowPriority = false, $unistorage)
     {
-        return $unistorage->applyAction($this, RegularFile::ACTION_GRAYSCALE);
+        return $unistorage->applyAction($this, RegularFile::ACTION_GRAYSCALE, [], $lowPriority);
     }
 
     /**
-     * @param  int        $angle 90, 180, 270. CCW
-     * @param  Unistorage $unistorage
+     * @param bool $lowPriority
+     * @param int $angle 90, 180, 270. CCW
+     * @param Unistorage $unistorage
      *
      * @return File
      */
-    public function rotate($angle, $unistorage)
+    public function rotate($angle, $lowPriority = false, $unistorage)
     {
         return $unistorage->applyAction(
             $this,
             RegularFile::ACTION_ROTATE,
             array(
                 'angle' => $angle,
-            )
+            ),
+            $lowPriority
         );
     }
 
     /**
-     * $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding my have following format:
+     * $wmWidth, $wmHeight, $horizontalPadding, $verticalPadding may have following format:
      * <ul>
      * <li> (\d+)px - number calculates in pixels
      * <li> (\d+) - number calculates in percents
      * </ul>
      *
-     * @param  ImageFile  $watermark
-     * @param  string     $wmWidth           watermark width
-     * @param  string     $wmHeight          watermark height
-     * @param  string     $horizontalPadding padding of watermark
-     * @param  string     $verticalPadding   padding of watermark
-     * @param  string     $corner            one of ImageFile::CORNER_*
-     * @param  Unistorage $unistorage
+     * @param ImageFile $watermark
+     * @param string $wmWidth watermark width
+     * @param string $wmHeight watermark height
+     * @param string $horizontalPadding padding of watermark
+     * @param string $verticalPadding padding of watermark
+     * @param string $corner one of ImageFile::CORNER_*
+     * @param bool $lowPriority
+     * @param Unistorage $unistorage
      *
      * @return File
      */
@@ -146,6 +154,7 @@ class ImageFile extends RegularFile
         $horizontalPadding,
         $verticalPadding,
         $corner,
+        $lowPriority = false,
         $unistorage
     ) {
         return $unistorage->applyAction(
@@ -158,7 +167,8 @@ class ImageFile extends RegularFile
                 'w_pad'     => $horizontalPadding,
                 'h_pad'     => $verticalPadding,
                 'corner'    => $corner,
-            )
+            ),
+            $lowPriority
         );
     }
 }
