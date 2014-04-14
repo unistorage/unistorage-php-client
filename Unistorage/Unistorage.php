@@ -134,10 +134,15 @@ class Unistorage
                 'video'   => 'VideoFile',
                 'audio'   => 'AudioFile',
                 'doc'     => 'DocFile',
+                'presentation' => 'RegularFile',
                 'unknown' => 'RegularFile',
             );
 
-            $className = $unistorageTypeToClassName[$answer['data']['unistorage_type']];
+            if(isset($unistorageTypeToClassName[$answer['data']['unistorage_type']])) {
+                $className = $unistorageTypeToClassName[$answer['data']['unistorage_type']];
+            } else {
+                $className = 'RegularFile';
+            }
 
             $className = $this->getFilesNamespace() . $className;
             $properties = $this->convertToFieldNames($answer['data']);
