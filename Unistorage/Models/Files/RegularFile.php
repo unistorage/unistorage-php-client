@@ -88,4 +88,10 @@ class RegularFile extends File
     {
         return $this->url;
     }
+    
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+    
 }
