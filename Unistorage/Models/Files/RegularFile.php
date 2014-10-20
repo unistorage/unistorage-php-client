@@ -86,6 +86,7 @@ class RegularFile extends File
 
     public function getUrl()
     {
-        return $this->url;
+        $ext = pathinfo($this->name, PATHINFO_EXTENSION);
+        return $this->url . (empty($ext) ? '' : '.'.$ext);
     }
 }
